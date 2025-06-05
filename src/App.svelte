@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { concat, filter } from 'lodash';
 	import { derived, writable } from 'svelte/store';
+	import { MAX_TABLE_LENGTH } from './util/constants';
 	import { getDiceSizeForTable } from './util/get-dice-size-for-table';
 
 	const table$ = writable<string[]>([
@@ -27,7 +28,12 @@
 	function addEntry(newEntry: string): (e: MouseEvent | KeyboardEvent) => void {
 		return e => {
 			e.preventDefault();
-			table$.update(entries => concat(entries, newEntry.trim()));
+			table$.update(entries => {
+				if (entries.length >= MAX_TABLE_LENGTH) {
+					return entries;
+				}
+				return concat(entries, newEntry.trim());
+			});
 			newEntryInput$.set('');
 		};
 	}
@@ -68,7 +74,11 @@
 				/>
 			</td>
 			<td>
-				<button onclick={addEntry($newEntryInput$)}>➕</button>
+				<button
+					onclick={addEntry($newEntryInput$)}
+					disabled={$table$.length >= MAX_TABLE_LENGTH}
+				>➕
+				</button>
 			</td>
 		</tr>
 		</tbody>

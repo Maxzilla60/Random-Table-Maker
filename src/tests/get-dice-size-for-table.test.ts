@@ -1,5 +1,6 @@
 import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
+import { MAX_TABLE_LENGTH } from '../util/constants';
 import { getDiceSizeForTable } from '../util/get-dice-size-for-table';
 
 const tableLengthsNotMappedToAD100 = [
@@ -49,7 +50,7 @@ const tableLengthsNotMappedToAD100 = [
 	},
 ];
 
-const testData = range(100).map(tableLength => {
+const testData = range(MAX_TABLE_LENGTH).map(tableLength => {
 	const notMappedTo100 = tableLengthsNotMappedToAD100.find(t => t.tableLength === tableLength);
 	if (notMappedTo100) {
 		return notMappedTo100;
