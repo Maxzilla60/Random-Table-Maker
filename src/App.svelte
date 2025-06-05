@@ -2,7 +2,7 @@
 	import { concat, filter } from 'lodash';
 	import { writable } from 'svelte/store';
 
-	const entries$ = writable<string[]>([
+	const table$ = writable<string[]>([
 		'Stirges (1d8 + 2)',
 		'Ghouls (1d4 + 1)',
 		'Ogre (1)',
@@ -13,19 +13,19 @@
 		'Owlbear (1)',
 	]);
 
-	const newEntry$ = writable<string>('');
+	const newEntryInput$ = writable<string>('');
 
 	function removeEntry(index: number): () => void {
 		return () => {
-			entries$.update(entries => filter(entries, (_, i) => i !== index));
+			table$.update(entries => filter(entries, (_, i) => i !== index));
 		};
 	}
 
-	function addEntry(entry: string): (e: MouseEvent | KeyboardEvent) => void {
+	function addEntry(newEntry: string): (e: MouseEvent | KeyboardEvent) => void {
 		return e => {
 			e.preventDefault();
-			entries$.update(entries => concat(entries, entry.trim()));
-			newEntry$.set('');
+			table$.update(entries => concat(entries, newEntry.trim()));
+			newEntryInput$.set('');
 		};
 	}
 </script>
@@ -36,12 +36,12 @@
 	<table>
 		<thead>
 		<tr>
-			<th>1d{ $entries$.length }</th>
+			<th>1d{ $table$.length }</th>
 			<th>Result</th>
 		</tr>
 		</thead>
 		<tbody>
-		{#each $entries$ as entry, index}
+		{#each $table$ as entry, index}
 			<tr>
 				<td>{index + 1}</td>
 				<td>{entry}</td>
@@ -54,10 +54,10 @@
 			<td></td>
 			<td>
 				<input
-					bind:value={$newEntry$}
+					bind:value={$newEntryInput$}
 					onkeydown={e => {
 						if (e.key === 'Enter') {
-							addEntry($newEntry$)(e);
+							addEntry($newEntryInput$)(e);
 						}
 					}}
 					type="text"
@@ -65,7 +65,7 @@
 				/>
 			</td>
 			<td>
-				<button onclick={addEntry($newEntry$)}>➕</button>
+				<button onclick={addEntry($newEntryInput$)}>➕</button>
 			</td>
 		</tr>
 		</tbody>
