@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { filter } from 'lodash';
 	import { writable } from 'svelte/store';
 
 	const entries$ = writable<string[]>([
@@ -11,6 +12,12 @@
 		'Wolves (1d4 + 2)',
 		'Owlbear (1)',
 	]);
+
+	function removeEntry(index: number): () => void {
+		return () => {
+			entries$.update(entries => filter(entries, (_, i) => i !== index));
+		};
+	}
 </script>
 
 <main>
@@ -28,6 +35,9 @@
 			<tr>
 				<td>{index + 1}</td>
 				<td>{entry}</td>
+				<td>
+					<button onclick={removeEntry(index)}>🗑️</button>
+				</td>
 			</tr>
 		{/each}
 		</tbody>
