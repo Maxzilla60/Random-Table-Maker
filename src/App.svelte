@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { concat, filter } from 'lodash';
 	import { derived, writable } from 'svelte/store';
+	import DiceValue from './components/DiceValue.svelte';
 	import { MAX_TABLE_LENGTH } from './util/constants';
 	import { getDiceSizeForTable } from './util/get-dice-size-for-table';
 	import { getDiceValuesForTable } from './util/get-dice-values-for-table';
@@ -54,7 +55,9 @@
 		<tbody>
 		{#each $table$ as entry, index}
 			<tr>
-				<td>{$values$[index]}</td>
+				<td>
+					<DiceValue type={$values$.type} value={$values$.values[index]}/>
+				</td>
 				<td>{entry}</td>
 				<td>
 					<button onclick={removeEntry(index)}>🗑️</button>
