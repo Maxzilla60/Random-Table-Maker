@@ -48,7 +48,13 @@
 		<table>
 			<thead>
 			<tr>
-				<th>1d{ diceSize } ({ type })</th>
+				<th>
+					{#if diceSize === 2}
+						coin
+					{:else}
+						d{ diceSize }
+					{/if}
+				</th>
 				<th>Odds</th>
 				<th>Result ({ table.length })</th>
 			</tr>
