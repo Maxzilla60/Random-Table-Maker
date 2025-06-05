@@ -11,16 +11,16 @@ export const DICE_SIZES = [
 
 export type DiceSize = 0 | 1 | typeof DICE_SIZES[number];
 
-export function getDiceSizeForTable({ length: tableLength }: string[]): DiceSize {
-	if (tableLength === 0) {
+export function getDiceSizeForTable(entries: string[]): DiceSize {
+	if (entries.length === 0) {
 		return 0;
 	}
-	if (tableLength === 1) {
+	if (entries.length === 1) {
 		return 1;
 	}
 
 	const diceSize = DICE_SIZES.find(size =>
-		size % tableLength === 0,
+		size % entries.length === 0,
 	);
 
 	return diceSize ?? 100;

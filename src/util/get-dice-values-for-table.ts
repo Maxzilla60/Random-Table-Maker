@@ -3,7 +3,7 @@ import type { DiceSize } from './get-dice-size-for-table';
 
 export type DiceValues = number[] | string[] | [number, number][];
 
-export function getDiceValuesForTable({ length: tableLength }: string[], diceSize: DiceSize): DiceValues {
+export function getDiceValuesForTable(entries: string[], diceSize: DiceSize): DiceValues {
 	if (diceSize === 2) {
 		return ['heads', 'tails'];
 	}
@@ -11,18 +11,18 @@ export function getDiceValuesForTable({ length: tableLength }: string[], diceSiz
 	return chain(diceSize)
 		.range()
 		.map(i => i + 1)
-		.chunk(floor(diceSize / tableLength))
+		.chunk(floor(diceSize / entries.length))
 		.map((chunk, index, chunks) => {
 			if (chunk.length === 1) {
 				return first(chunk)!;
 			}
 
-			if (chunks.length > tableLength && index === tableLength - 1) {
+			if (chunks.length > entries.length && index === entries.length - 1) {
 				return [first(chunk)!, diceSize];
 			}
 
 			return [first(chunk)!, last(chunk)!];
 		})
-		.take(tableLength)
+		.take(entries.length)
 		.value() as DiceValues;
 }
