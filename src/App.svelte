@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { filter } from 'lodash';
+	import { concat, filter } from 'lodash';
 	import { writable } from 'svelte/store';
 
 	const entries$ = writable<string[]>([
@@ -13,9 +13,19 @@
 		'Owlbear (1)',
 	]);
 
+	const newEntry$ = writable<string>('');
+
 	function removeEntry(index: number): () => void {
 		return () => {
 			entries$.update(entries => filter(entries, (_, i) => i !== index));
+		};
+	}
+
+	function addEntry(entry: string): (e: MouseEvent | KeyboardEvent) => void {
+		return e => {
+			e.preventDefault();
+			entries$.update(entries => concat(entries, entry.trim()));
+			newEntry$.set('');
 		};
 	}
 </script>
@@ -40,6 +50,24 @@
 				</td>
 			</tr>
 		{/each}
+		<tr>
+			<td></td>
+			<td>
+				<input
+					bind:value={$newEntry$}
+					onkeydown={e => {
+						if (e.key === 'Enter') {
+							addEntry($newEntry$)(e);
+						}
+					}}
+					type="text"
+					placeholder="Add entry"
+				/>
+			</td>
+			<td>
+				<button onclick={addEntry($newEntry$)}>➕</button>
+			</td>
+		</tr>
 		</tbody>
 	</table>
 </main>
