@@ -1,0 +1,18 @@
+- [ ] LocalStorage
+- [ ] Styling
+- [ ] Export
+- [ ] Editing
+- [ ] Drag & drop reordering
+- [ ] Dice
+    - [ ] No coins
+    - [ ] DCC dice
+    - [ ] Fudge dice
+- [ ] Modes
+    - [ ] "Reroll" mode
+    - [ ] "Bell curve" mode
+- [ ] Documentation
+- [ ] Svelte integration tests?
+- [ ] Copy-paste parsing
+- [ ] Dice icons
+- [ ] Odds progress bar
+- [ ] Sort alphabetically button
