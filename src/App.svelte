@@ -3,6 +3,7 @@
 	import { derived, writable } from 'svelte/store';
 	import { MAX_TABLE_LENGTH } from './util/constants';
 	import { getDiceSizeForTable } from './util/get-dice-size-for-table';
+	import { getDiceValuesForTable } from './util/get-dice-values-for-table';
 
 	const table$ = writable<string[]>([
 		'Stirges (1d8 + 2)',
@@ -18,6 +19,7 @@
 	const newEntryInput$ = writable<string>('');
 
 	const diceSize$ = derived(table$, getDiceSizeForTable);
+	const values$ = derived([table$, diceSize$], ([table, diceSize]) => getDiceValuesForTable(table, diceSize));
 
 	function removeEntry(index: number): () => void {
 		return () => {
@@ -52,7 +54,7 @@
 		<tbody>
 		{#each $table$ as entry, index}
 			<tr>
-				<td>{index + 1}</td>
+				<td>{$values$[index]}</td>
 				<td>{entry}</td>
 				<td>
 					<button onclick={removeEntry(index)}>🗑️</button>
