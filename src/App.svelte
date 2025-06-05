@@ -3,6 +3,7 @@
 	import { derived, writable } from 'svelte/store';
 	import DiceValue from './components/DiceValue.svelte';
 	import { MAX_TABLE_LENGTH } from './util/constants';
+	import { getDiceOddsForTable } from './util/get-dice-odds-for-table';
 	import { getDiceSizeForTable } from './util/get-dice-size-for-table';
 	import { getDiceValuesForTable } from './util/get-dice-values-for-table';
 
@@ -21,6 +22,7 @@
 
 	const diceSize$ = derived(table$, getDiceSizeForTable);
 	const values$ = derived([table$, diceSize$], ([table, diceSize]) => getDiceValuesForTable(table, diceSize));
+	const odds$ = derived([values$, diceSize$], ([values, diceSize]) => getDiceOddsForTable(values, diceSize));
 
 	function removeEntry(index: number): () => void {
 		return () => {
@@ -49,6 +51,7 @@
 		<thead>
 		<tr>
 			<th>1d{ $diceSize$ }</th>
+			<th>Odds</th>
 			<th>Result</th>
 		</tr>
 		</thead>
@@ -58,6 +61,7 @@
 				<td>
 					<DiceValue type={$values$.type} value={$values$.values[index]}/>
 				</td>
+				<td>{$odds$[index].toFixed(2)}%</td>
 				<td>{entry}</td>
 				<td>
 					<button onclick={removeEntry(index)}>🗑️</button>
@@ -65,6 +69,7 @@
 			</tr>
 		{/each}
 		<tr>
+			<td></td>
 			<td></td>
 			<td>
 				<input
