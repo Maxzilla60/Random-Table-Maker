@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { concat, filter } from 'lodash';
-	import { writable } from 'svelte/store';
+	import { derived, writable } from 'svelte/store';
+	import { getDiceSizeForTable } from './util/get-dice-size-for-table';
 
 	const table$ = writable<string[]>([
 		'Stirges (1d8 + 2)',
@@ -14,6 +15,8 @@
 	]);
 
 	const newEntryInput$ = writable<string>('');
+
+	const diceSize$ = derived(table$, getDiceSizeForTable);
 
 	function removeEntry(index: number): () => void {
 		return () => {
@@ -36,7 +39,7 @@
 	<table>
 		<thead>
 		<tr>
-			<th>1d{ $table$.length }</th>
+			<th>1d{ $diceSize$ }</th>
 			<th>Result</th>
 		</tr>
 		</thead>
