@@ -7,9 +7,13 @@
 		"preview": "vite preview",
 		"check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
 	},
+	"dependencies": {
+		"lodash": "^4.17.21"
+	},
 	"devDependencies": {
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tsconfig/svelte": "^5.0.4",
+		"@types/lodash": "^4.17.17",
 		"svelte": "^5.28.1",
 		"svelte-check": "^4.1.6",
 		"typescript": "~5.8.3",
