@@ -2,7 +2,7 @@ import { last, merge, range, times } from 'lodash';
 import { describe, expect, test } from 'vitest';
 import { MAX_TABLE_LENGTH } from '../util/constants';
 import { getDiceSizeForTable } from '../util/get-dice-size-for-table';
-import { getDiceValuesForTable, type RangeDiceValues } from '../util/get-dice-values-for-table';
+import { getDiceValuesForTable } from '../util/get-dice-values-for-table';
 
 const tableLengthsNotMappedToD100 = [
 	{
@@ -85,7 +85,7 @@ describe('getDiceValuesForTable', () => {
 	test.each(merge(tableLengthsNotMappedToD100, sampleTableLengthsMappedToD100))('table of length $tableLength should be mapped to $expectedValues', ({ tableLength, expectedValues }) => {
 		const table = new Array(tableLength);
 
-		const results = getDiceValuesForTable(table, getDiceSizeForTable(table)).values;
+		const results = getDiceValuesForTable(table, getDiceSizeForTable(table));
 
 		expect(results).toHaveLength(tableLength);
 		expect(results).toStrictEqual(expectedValues);
@@ -94,7 +94,7 @@ describe('getDiceValuesForTable', () => {
 	test.each(tableLengthsMappedToD100)('table of length $0 should be mapped to d100', tableLength => {
 		const table = new Array(tableLength);
 
-		const results = (getDiceValuesForTable(table, getDiceSizeForTable(table)) as RangeDiceValues).values;
+		const results = getDiceValuesForTable(table, getDiceSizeForTable(table)) as [number, number][];
 
 		expect(results).toHaveLength(tableLength);
 		expect(last(results)![1]).toBe(100);

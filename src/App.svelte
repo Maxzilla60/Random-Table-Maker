@@ -5,6 +5,7 @@
 	import { MAX_TABLE_LENGTH } from './util/constants';
 	import { getDiceOddsForTable } from './util/get-dice-odds-for-table';
 	import { getDiceSizeForTable } from './util/get-dice-size-for-table';
+	import { getDiceValueTypeForTable } from './util/get-dice-value-type-for-table';
 	import { getDiceValuesForTable } from './util/get-dice-values-for-table';
 
 	const table$ = writable<string[]>([
@@ -21,8 +22,9 @@
 	const newEntryInput$ = writable<string>('');
 
 	const diceSize$ = derived(table$, getDiceSizeForTable);
+	const type$ = derived([table$, diceSize$], ([table, diceSize]) => getDiceValueTypeForTable(table, diceSize));
 	const values$ = derived([table$, diceSize$], ([table, diceSize]) => getDiceValuesForTable(table, diceSize));
-	const odds$ = derived([values$, diceSize$], ([values, diceSize]) => getDiceOddsForTable(values, diceSize));
+	const odds$ = derived([values$, diceSize$], ([values, diceSize]) => getDiceOddsForTable(diceSize, values));
 
 	function removeEntry(index: number): () => void {
 		return () => {
@@ -59,7 +61,7 @@
 		{#each $table$ as entry, index}
 			<tr>
 				<td>
-					<DiceValue type={$values$.type} value={$values$.values[index]}/>
+					<DiceValue type={$type$} value={$values$[index]}/>
 				</td>
 				<td>{$odds$[index].toFixed(2)}%</td>
 				<td>{entry}</td>

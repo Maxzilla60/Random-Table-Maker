@@ -1,32 +1,14 @@
-import { chain, first, floor, isArray, last } from 'lodash';
+import { chain, first, floor, last } from 'lodash';
 import type { DiceSize } from './get-dice-size-for-table';
 
-export type SingleDiceValues = {
-	type: 'single';
-	values: number[];
-}
-
-export type StringDiceValues = {
-	type: 'string';
-	values: string[];
-}
-
-export type RangeDiceValues = {
-	type: 'range';
-	values: [number, number][];
-}
-
-export type DiceValues = SingleDiceValues | StringDiceValues | RangeDiceValues;
+export type DiceValues = number[] | string[] | [number, number][];
 
 export function getDiceValuesForTable({ length: tableLength }: string[], diceSize: DiceSize): DiceValues {
-	if (tableLength === 2) {
-		return {
-			type: 'string',
-			values: ['heads', 'tails'],
-		};
+	if (diceSize === 2) {
+		return ['heads', 'tails'];
 	}
 
-	const values = chain(diceSize)
+	return chain(diceSize)
 		.range()
 		.map(i => i + 1)
 		.chunk(floor(diceSize / tableLength))
@@ -42,9 +24,5 @@ export function getDiceValuesForTable({ length: tableLength }: string[], diceSiz
 			return [first(chunk)!, last(chunk)!];
 		})
 		.take(tableLength)
-		.value();
-
-	const type = isArray(values[0]) ? 'range' : 'single';
-
-	return { type, values } as SingleDiceValues | RangeDiceValues;
+		.value() as DiceValues;
 }
