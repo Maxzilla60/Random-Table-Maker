@@ -38,7 +38,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		expect(result).toEqual({
 			diceSize: 2,
-			type: 'string',
+			type: 'single',
 			table: [
 				{
 					value: 'heads',

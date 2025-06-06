@@ -6,17 +6,7 @@ export type SingleRandomTable = {
 	diceSize: DiceSize;
 	type: 'single';
 	table: {
-		value: number;
-		odds: number;
-		result: string;
-	}[];
-}
-
-export type StringRandomTable = {
-	diceSize: DiceSize;
-	type: 'string';
-	table: {
-		value: string;
+		value: number | string;
 		odds: number;
 		result: string;
 	}[];
@@ -32,7 +22,7 @@ export type RangeRandomTable = {
 	}[];
 }
 
-export type RandomTable = SingleRandomTable | StringRandomTable | RangeRandomTable;
+export type RandomTable = SingleRandomTable | RangeRandomTable;
 
 export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 	if (entries.length === 0) {
@@ -56,7 +46,7 @@ export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 	if (entries.length === 2) {
 		return {
 			diceSize: 2,
-			type: 'string',
+			type: 'single',
 			table: [
 				{
 					value: 'heads',

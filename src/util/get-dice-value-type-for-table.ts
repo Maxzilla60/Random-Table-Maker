@@ -1,10 +1,6 @@
-export type DiceValueType = 'single' | 'string' | 'range';
+export type DiceValueType = 'single' | 'range';
 
 export function getDiceValueTypeForTable(entries: string[], diceSize: number): DiceValueType {
-	if (diceSize === 2) {
-		return 'string';
-	}
-
 	if (diceSize === entries.length) {
 		return 'single';
 	}

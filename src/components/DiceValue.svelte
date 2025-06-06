@@ -1,12 +1,7 @@
 <script lang="ts">
 	type SingleProps = {
 		type: 'single';
-		value: number;
-	}
-
-	type StringProps = {
-		type: 'string';
-		value: string;
+		value: number | string;
 	}
 
 	type RangeProps = {
@@ -14,15 +9,13 @@
 		value: [number, number];
 	}
 
-	type Props = SingleProps | StringProps | RangeProps;
+	type Props = SingleProps | RangeProps;
 
 	const { type, value }: Props = $props();
 </script>
 
 <span>
 	{#if type === 'single'}
-		{value}
-	{:else if type === 'string'}
 		{value}
 	{:else if type === 'range'}
 		{value[0]}-{value[1]}
