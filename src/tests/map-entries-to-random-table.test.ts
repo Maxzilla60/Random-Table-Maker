@@ -1,4 +1,4 @@
-import { range } from 'lodash';
+import { concat, range } from 'lodash';
 import { describe, expect, test } from 'vitest';
 import { mapEntriesToRandomTable } from '../util/map-entries-to-random-table';
 
@@ -285,6 +285,145 @@ describe('mapEntriesToRandomTable', () => {
 			7.000000000000001,
 			16,
 		]);
+		expect(table.map(({ result }) => result)).toEqual(entries);
+	});
+
+	test('should map 15 entries to a d6 & d10 table', () => {
+		const entries = range(15).map(i => `Result ${i + 1}`);
+
+		const result = mapEntriesToRandomTable(entries);
+
+		expect(result.diceSize).toStrictEqual([6, 10]);
+		expect(result.type).toStrictEqual('range-range');
+		expect(result.table).toHaveLength(15);
+
+		const table = result.table;
+		expect(table.map(({ value }) => value)).toEqual([
+			[1, 2],
+			[1, 2],
+			[1, 2],
+			[1, 2],
+			[1, 2],
+			[3, 4],
+			[3, 4],
+			[3, 4],
+			[3, 4],
+			[3, 4],
+			[5, 6],
+			[5, 6],
+			[5, 6],
+			[5, 6],
+			[5, 6],
+		]);
+		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[7, 8],
+			[9, 10],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[7, 8],
+			[9, 10],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[7, 8],
+			[9, 10],
+		]);
+		table.forEach(({ odds }) => expect(odds).toEqual(100 / 15));
+		expect(table.map(({ result }) => result)).toEqual(entries);
+	});
+
+	test('should map 16 entries to a d2 & d8 table', () => {
+		const entries = range(16).map(i => `Result ${i + 1}`);
+
+		const result = mapEntriesToRandomTable(entries);
+
+		expect(result.diceSize).toStrictEqual([2, 8]);
+		expect(result.type).toStrictEqual('single-single');
+		expect(result.table).toHaveLength(16);
+
+		const table = result.table;
+		expect(table.map(({ value }) => value)).toEqual(concat(
+			range(8).map(() => 'heads'),
+			range(8).map(() => 'tails'),
+		));
+		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual(concat(
+			range(8).map(i => i + 1),
+			range(8).map(i => i + 1),
+		));
+		table.forEach(({ odds }) => expect(odds).toEqual(100 / 16));
+		expect(table.map(({ result }) => result)).toEqual(entries);
+	});
+
+	test('should map 18 entries to a d6 & d6 table', () => {
+		const entries = range(18).map(i => `Result ${i + 1}`);
+
+		const result = mapEntriesToRandomTable(entries);
+
+		expect(result.diceSize).toStrictEqual([6, 6]);
+		expect(result.type).toStrictEqual('range-range');
+		expect(result.table).toHaveLength(18);
+
+		const table = result.table;
+		expect(table.map(({ value }) => value)).toEqual([
+			1,
+			1,
+			1,
+			2,
+			2,
+			2,
+			3,
+			3,
+			3,
+			4,
+			4,
+			4,
+			5,
+			5,
+			5,
+			6,
+			6,
+			6,
+		]);
+		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+		]);
+		table.forEach(({ odds }) => expect(odds).toEqual(100 / 18));
+		expect(table.map(({ result }) => result)).toEqual(entries);
+	});
+
+	test('should map 20 entries to a d20 table', () => {
+		const entries = range(20).map(i => `Result ${i + 1}`);
+
+		const result = mapEntriesToRandomTable(entries);
+
+		expect(result.diceSize).toStrictEqual([20]);
+		expect(result.type).toStrictEqual('single');
+		expect(result.table).toHaveLength(20);
+
+		const table = result.table;
+		expect(table.map(({ value }) => value)).toEqual(range(20).map(i => i + 1));
+		table.map(({ odds }) => odds).forEach(odds => expect(odds).toEqual(100 / 20));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
