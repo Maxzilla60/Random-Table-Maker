@@ -1,4 +1,4 @@
-- [ ] LocalStorage
+- [x] LocalStorage
 - [ ] Styling
 - [ ] Export
 - [ ] Editing
