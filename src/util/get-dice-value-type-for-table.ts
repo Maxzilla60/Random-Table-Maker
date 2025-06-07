@@ -1,4 +1,4 @@
-export type DiceValueType = 'single' | 'range' | 'single-single' | 'single-range' | 'range-range';
+export type DiceValueType = 'single' | 'range' | 'single-single' | 'range-range';
 
 export function getDiceValueTypeForTable(entries: string[], diceSize: number[]): DiceValueType {
 	if (diceSize.length === 1) {
@@ -14,10 +14,6 @@ export function getDiceValueTypeForTable(entries: string[], diceSize: number[]):
 
 		if (entries.length === totalCombinations) {
 			return 'single-single';
-		}
-
-		if (firstDie === entries.length) {
-			return 'single-range';
 		}
 
 		return 'range-range';

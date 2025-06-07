@@ -39,18 +39,6 @@ export type SingleSingleRandomTable = {
 	}[];
 }
 
-export type SingleRangeRandomTable = {
-	diceSize: DiceSize;
-	type: 'single-range';
-	table: {
-		value?: number;
-		secondValue: [number, number];
-		rowspan?: number;
-		odds: number;
-		result: string;
-	}[];
-}
-
 export type RangeRangeRandomTable = {
 	diceSize: DiceSize;
 	type: 'range-range';
@@ -66,7 +54,6 @@ export type RangeRangeRandomTable = {
 export type RandomTable = SingleRandomTable
 	| RangeRandomTable
 	| SingleSingleRandomTable
-	| SingleRangeRandomTable
 	| RangeRangeRandomTable;
 
 export function mapEntriesToRandomTable(entries: string[]): RandomTable {
@@ -187,18 +174,6 @@ function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], i
 		return {
 			value: hasRowSpan ? firstValue : undefined,
 			secondValue,
-			odds: 100 / entries.length,
-			rowspan: hasRowSpan ? divisor : undefined,
-			result: entries[index],
-		};
-	}
-
-	if (type === 'single-range') {
-		const firstValue = value as number;
-		const rangeValue = first(value as [number, number][]);
-		return {
-			value: hasRowSpan ? firstValue : undefined,
-			secondValue: rangeValue,
 			odds: 100 / entries.length,
 			rowspan: hasRowSpan ? divisor : undefined,
 			result: entries[index],
