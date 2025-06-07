@@ -9,6 +9,9 @@
 	const newEntryInput$ = writable<string>('');
 	const draggingIndex$ = writable<number | null>(null);
 
+	const showOdds$ = writable<boolean>(false);
+	const showReorder$ = writable<boolean>(false);
+
 	function handleDragStart(event: DragEvent, index: number): void {
 		draggingIndex$.set(index);
 		if (event.dataTransfer) {
@@ -41,13 +44,27 @@
 <main>
 	<h1>Random Table Maker</h1>
 
+	<details>
+		<summary>⚙️ Settings</summary>
+		<label>
+			Show Odds
+			<input type="checkbox" bind:checked={$showOdds$}/>
+		</label><br/>
+		<label>
+			Reorder
+			<input type="checkbox" bind:checked={$showReorder$}/>
+		</label>
+	</details>
+
 	{#if $table$}
 		{@const { diceSize, table } = $table$}
 		{@const [firstDie, secondDie] = diceSize}
 		<table>
 			<thead>
 			<tr>
-				<th>Reorder</th>
+				{#if $showReorder$}
+					<th>Reorder</th>
+				{/if}
 				<th colspan={secondDie ? 2 : 1}>
 					{#if firstDie === 2}
 						coin
@@ -62,10 +79,14 @@
 						{/if}
 					{/if}
 				</th>
-				<th>Odds</th>
+				{#if $showOdds$}
+					<th>Odds</th>
+				{/if}
 				<th>Result ({ $entries$.length })</th>
+				<th>Delete</th>
 			</tr>
 			</thead>
+
 			<tbody>
 			{#each table as entry, index}
 				{@const { value, secondValue, odds, result } = entry}
@@ -74,13 +95,15 @@
 					ondragover={handleDragOver}
 					ondrop={e => handleDrop(e, index)}
 				>
-					<td
-						draggable="true"
-						ondragstart={e => handleDragStart(e, index)}
-						ondragend={handleDragEnd}
-					>
-						↕️
-					</td>
+					{#if $showReorder$}
+						<td
+							draggable="true"
+							ondragstart={e => handleDragStart(e, index)}
+							ondragend={handleDragEnd}
+						>
+							↕️
+						</td>
+					{/if}
 					<td>
 						<DiceValue value={value}/>
 					</td>
@@ -89,7 +112,9 @@
 							<DiceValue value={secondValue}/>
 						</td>
 					{/if}
-					<td>{odds.toFixed(2)}%</td>
+					{#if $showOdds$}
+						<td>{odds.toFixed(2)}%</td>
+					{/if}
 					<td>{result}</td>
 					<td>
 						<button onclick={() => removeEntry(index)}>🗑️</button>
@@ -97,12 +122,16 @@
 				</tr>
 			{/each}
 			<tr>
-				<td></td>
+				{#if $showReorder$}
+					<td></td>
+				{/if}
 				<td></td>
 				{#if secondDie}
 					<td></td>
 				{/if}
-				<td></td>
+				{#if $showOdds$}
+					<td></td>
+				{/if}
 				<td>
 					<input
 						bind:value={$newEntryInput$}
