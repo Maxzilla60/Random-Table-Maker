@@ -76,13 +76,13 @@ describe('mapEntriesToRandomTable', () => {
 	test('should map 4 entries to a d4 table', () => {
 		const entries = ['Summer', 'Autumn', 'Winter', 'Spring'];
 
-		const mappedTable = mapEntriesToRandomTable(entries);
+		const result = mapEntriesToRandomTable(entries);
 
-		expect(mappedTable.diceSize).toBe(4);
-		expect(mappedTable.type).toBe('single');
-		expect(mappedTable.table).toHaveLength(4);
+		expect(result.diceSize).toBe(4);
+		expect(result.type).toBe('single');
+		expect(result.table).toHaveLength(4);
 
-		const table = mappedTable.table;
+		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual(range(4).map(i => i + 1));
 		table.forEach(({ odds }) => expect(odds).toBeCloseTo(25, 2));
 		expect(table.map(({ result }) => result)).toEqual(entries);
@@ -112,13 +112,13 @@ describe('mapEntriesToRandomTable', () => {
 	test('should map 6 entries to a d6 table', () => {
 		const entries = ['+', '+', ' ', ' ', '-', '-'];
 
-		const mappedTable = mapEntriesToRandomTable(entries);
+		const result = mapEntriesToRandomTable(entries);
 
-		expect(mappedTable.diceSize).toBe(6);
-		expect(mappedTable.type).toBe('single');
-		expect(mappedTable.table).toHaveLength(6);
+		expect(result.diceSize).toBe(6);
+		expect(result.type).toBe('single');
+		expect(result.table).toHaveLength(6);
 
-		const table = mappedTable.table;
+		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual([1, 2, 3, 4, 5, 6]);
 		expect(table.map(({ odds }) => odds)).toEqual(range(6).map(() => 16.666666666666668));
 		expect(table.map(({ result }) => result)).toEqual(entries);
@@ -158,13 +158,13 @@ describe('mapEntriesToRandomTable', () => {
 	test('should map 8 entries to a d8 table', () => {
 		const entries = range(8).map(i => `Result ${i + 1}`);
 
-		const mappedTable = mapEntriesToRandomTable(entries);
+		const result = mapEntriesToRandomTable(entries);
 
-		expect(mappedTable.diceSize).toBe(8);
-		expect(mappedTable.type).toBe('single');
-		expect(mappedTable.table).toHaveLength(8);
+		expect(result.diceSize).toBe(8);
+		expect(result.type).toBe('single');
+		expect(result.table).toHaveLength(8);
 
-		const table = mappedTable.table;
+		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual(range(8).map(i => i + 1));
 		expect(table.map(({ odds }) => odds)).toEqual(range(8).map(() => 12.5));
 		expect(table.map(({ result }) => result)).toEqual(entries);
