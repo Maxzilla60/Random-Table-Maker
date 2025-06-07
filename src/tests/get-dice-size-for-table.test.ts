@@ -68,6 +68,6 @@ describe('getDiceSizeForTable', () => {
 
 		const result = getDiceSizeForTable(table);
 
-		expect(result).toBe(expectedSize);
+		expect(result).toStrictEqual(expectedSize);
 	});
 });
