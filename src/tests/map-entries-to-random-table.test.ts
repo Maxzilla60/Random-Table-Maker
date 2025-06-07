@@ -69,7 +69,7 @@ describe('mapEntriesToRandomTable', () => {
 			[3, 4],
 			[5, 6],
 		]);
-		expect(table.map(({ odds }) => odds)).toEqual(range(3).map(() => 33.33333333333333));
+		table.map(({ odds }) => odds).forEach(odds => expect(odds).toBeCloseTo(100 / 3));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
@@ -84,7 +84,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual(range(4).map(i => i + 1));
-		table.forEach(({ odds }) => expect(odds).toBeCloseTo(25, 2));
+		table.map(({ odds }) => odds).forEach(odds => expect(odds).toEqual(100 / 4));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
@@ -105,7 +105,7 @@ describe('mapEntriesToRandomTable', () => {
 			[7, 8],
 			[9, 10],
 		]);
-		table.forEach(({ odds }) => expect(odds).toBeCloseTo(20, 2));
+		table.map(({ odds }) => odds).forEach(odds => expect(odds).toEqual(100 / 5));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
@@ -120,7 +120,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual([1, 2, 3, 4, 5, 6]);
-		expect(table.map(({ odds }) => odds)).toEqual(range(6).map(() => 16.666666666666668));
+		table.map(({ odds }) => odds).forEach(odds => expect(odds).toEqual(100 / 6));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
@@ -166,7 +166,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual(range(8).map(i => i + 1));
-		expect(table.map(({ odds }) => odds)).toEqual(range(8).map(() => 12.5));
+		table.map(({ odds }) => odds).forEach(odds => expect(odds).toEqual(100 / 8));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
@@ -202,7 +202,7 @@ describe('mapEntriesToRandomTable', () => {
 			[3, 4],
 			[5, 6],
 		]);
-		expect(table.map(({ odds }) => odds)).toEqual(range(9).map(() => 11.11111111111111));
+		table.map(({ odds }) => odds).forEach(odds => expect(odds).toEqual(100 / 9));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
@@ -316,7 +316,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual(range(1, 101));
-		table.forEach(({ odds }) => expect(odds).toBeCloseTo(1, 2));
+		table.forEach(({ odds }) => expect(odds).toEqual(1));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 });
