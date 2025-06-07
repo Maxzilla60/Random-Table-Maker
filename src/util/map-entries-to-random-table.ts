@@ -1,12 +1,14 @@
 import { chain, first, floor, last, type List } from 'lodash';
-import { type DiceSize, getDiceSizeForTable } from './get-dice-size-for-table';
+import { type DiceSize, type DiceSizeContent, getDiceSizesForTable } from './get-dice-sizes-for-table';
 import { type DiceValueType, getDiceValueTypeForTable } from './get-dice-value-type-for-table';
+import { greatestCommonDivisor } from './greatestCommonDivisor';
 
 export type SingleRandomTable = {
 	diceSize: DiceSize;
 	type: 'single';
 	table: {
 		value: number | string;
+		secondValue?: undefined;
 		odds: number;
 		result: string;
 	}[];
@@ -17,24 +19,62 @@ export type RangeRandomTable = {
 	type: 'range';
 	table: {
 		value: [number, number];
+		secondValue?: undefined;
 		odds: number;
 		result: string;
 	}[];
 }
 
-export type RandomTable = SingleRandomTable | RangeRandomTable;
+export type SingleSingleRandomTable = {
+	diceSize: DiceSize;
+	type: 'single-single';
+	table: {
+		value: number;
+		secondValue: number;
+		odds: number;
+		result: string;
+	}[];
+}
+
+export type SingleRangeRandomTable = {
+	diceSize: DiceSize;
+	type: 'single-range';
+	table: {
+		value: number;
+		secondValue: [number, number];
+		odds: number;
+		result: string;
+	}[];
+}
+
+export type RangeRangeRandomTable = {
+	diceSize: DiceSize;
+	type: 'range-range';
+	table: {
+		value: [number, number];
+		secondValue: [number, number];
+		odds: number;
+		result: string;
+	}[];
+}
+
+export type RandomTable = SingleRandomTable
+	| RangeRandomTable
+	| SingleSingleRandomTable
+	| SingleRangeRandomTable
+	| RangeRangeRandomTable;
 
 export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 	if (entries.length === 0) {
 		return {
-			diceSize: 0,
+			diceSize: [0],
 			type: 'single',
 			table: [],
 		};
 	}
 	if (entries.length === 1) {
 		return {
-			diceSize: 1,
+			diceSize: [1],
 			type: 'single',
 			table: [{
 				value: 1,
@@ -45,7 +85,7 @@ export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 	}
 	if (entries.length === 2) {
 		return {
-			diceSize: 2,
+			diceSize: [2],
 			type: 'single',
 			table: [
 				{
@@ -62,26 +102,52 @@ export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 		};
 	}
 
-	const diceSize = getDiceSizeForTable(entries);
-	const type = getDiceValueTypeForTable(entries, diceSize);
+	const diceSizes = getDiceSizesForTable(entries);
+	const type = getDiceValueTypeForTable(entries, diceSizes);
 
-	const table = chain(diceSize)
-		.range()
-		.map(i => i + 1)
-		.chunk(floor(diceSize / entries.length))
-		.map((chunk, index, chunks) => {
-			return mapChunkToRangeTuple(chunk, chunks, entries, index, diceSize);
-		})
-		.take(entries.length)
-		.map((value, index) => {
-			return mapDiceValueToTableEntry(type, value, entries, index, diceSize);
-		})
-		.value();
+	if (diceSizes.length == 1) {
+		const [diceSize] = diceSizes;
+		const chunkSize = floor(diceSize / entries.length);
 
-	return { diceSize, type, table } as RandomTable;
+		const table = createChunks(diceSize, entries, chunkSize)
+			.map((value, index) => mapToTableEntry(type, value, entries, index, diceSizes));
+
+		return { diceSize: diceSizes, type, table } as RandomTable;
+	}
+
+	if (diceSizes.length === 2) {
+		const [firstDie, secondDie] = diceSizes;
+		const gcd = greatestCommonDivisor(entries.length, firstDie);
+
+		const firstChunkSize = firstDie / gcd;
+		const firstValues = firstDie === 2 ? ['heads', 'tails'] : createChunks(firstDie, entries, firstChunkSize);
+
+		const secondChunkSize = secondDie / (entries.length / gcd);
+		const secondValues = createChunks(secondDie, entries, secondChunkSize);
+
+		const table = chain(firstValues)
+			.map(firstRange => secondValues.map(secondRange => [firstRange, secondRange]))
+			.flatMap()
+			.map((value, index) => mapToTableEntry(type, value as Value, entries, index, diceSizes))
+			.value();
+
+		return { diceSize: diceSizes, type, table } as RandomTable;
+	}
+
+	return { diceSize: diceSizes, type, table: [] } as RandomTable;
 }
 
-function mapChunkToRangeTuple(chunk: number[], allChunks: List<number[]>, entries: string[], index: number, diceSize: DiceSize): number | [number, number] {
+function createChunks(diceSize: DiceSizeContent, entries: string[], chunkSize: number): (number | [number, number])[] {
+	return chain(diceSize)
+		.range()
+		.map(i => i + 1)
+		.chunk(chunkSize)
+		.map((chunk, index, chunks) => mapChunkToRangeTuple(chunk, chunks, entries, index, diceSize))
+		.take(entries.length)
+		.value();
+}
+
+function mapChunkToRangeTuple(chunk: number[], allChunks: List<number[]>, entries: string[], index: number, diceSize: DiceSizeContent): number | [number, number] {
 	if (chunk.length === 1) {
 		return first(chunk)!;
 	}
@@ -93,18 +159,54 @@ function mapChunkToRangeTuple(chunk: number[], allChunks: List<number[]>, entrie
 	return [first(chunk)!, last(chunk)!];
 }
 
-function mapDiceValueToTableEntry(type: DiceValueType, value: number | [number, number], entries: string[], index: number, diceSize: DiceSize) {
+type Value = number
+	| [number, number]
+	| [number, number][]
+	| [number, [number, number]];
+
+function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], index: number, diceSize: DiceSize) {
 	if (type === 'range') {
 		const rangeValue = value as [number, number];
 		return {
 			value: rangeValue,
-			odds: (rangeValue[1] - rangeValue[0] + 1) / diceSize * 100,
+			odds: (rangeValue[1] - rangeValue[0] + 1) / diceSize[0]! * 100,
+			result: entries[index],
+		};
+	}
+
+	if (type === 'single-single') {
+		const [firstValue, secondValue] = value as [number, number];
+		return {
+			value: firstValue,
+			secondValue,
+			odds: 100 / entries.length,
+			result: entries[index],
+		};
+	}
+
+	if (type === 'single-range') {
+		const firstValue = value as number;
+		const rangeValue = first(value as [number, number][]);
+		return {
+			value: firstValue,
+			secondValue: rangeValue,
+			odds: 100 / entries.length,
+			result: entries[index],
+		};
+	}
+
+	if (type === 'range-range') {
+		const [firstRange, secondRange] = value as [number, number][];
+		return {
+			value: firstRange,
+			secondValue: secondRange,
+			odds: 100 / entries.length,
 			result: entries[index],
 		};
 	}
 
 	return {
-		value: value as number,
+		value,
 		odds: 100 / entries.length,
 		result: entries[index],
 	};

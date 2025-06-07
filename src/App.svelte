@@ -45,27 +45,40 @@
 
 	{#if $table$}
 		{@const { diceSize, table } = $table$}
+		{@const [firstDie, secondDie] = diceSize}
 		<table>
 			<thead>
 			<tr>
-				<th>
-					{#if diceSize === 2}
+				<th colspan={secondDie ? 2 : 1}>
+					{#if firstDie === 2}
 						coin
 					{:else}
-						d{ diceSize }
+						d{ firstDie }
+					{/if}
+					{#if secondDie}
+						{#if secondDie === 2}
+							& coin
+						{:else}
+							& d{ secondDie }
+						{/if}
 					{/if}
 				</th>
 				<th>Odds</th>
-				<th>Result ({ table.length })</th>
+				<th>Result ({ $entries$.length })</th>
 			</tr>
 			</thead>
 			<tbody>
 			{#each table as entry, index}
-				{@const { value, odds, result } = entry}
+				{@const { value, secondValue, odds, result } = entry}
 				<tr>
 					<td>
 						<DiceValue value={value}/>
 					</td>
+					{#if secondValue}
+						<td>
+							<DiceValue value={secondValue}/>
+						</td>
+					{/if}
 					<td>{odds.toFixed(2)}%</td>
 					<td>{result}</td>
 					<td>
@@ -75,6 +88,9 @@
 			{/each}
 			<tr>
 				<td></td>
+				{#if secondDie}
+					<td></td>
+				{/if}
 				<td></td>
 				<td>
 					<input

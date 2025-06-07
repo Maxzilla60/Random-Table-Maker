@@ -9,7 +9,7 @@ describe('mapEntriesToRandomTable', () => {
 		const result = mapEntriesToRandomTable(entries);
 
 		expect(result).toEqual({
-			diceSize: 0,
+			diceSize: [0],
 			type: 'single',
 			table: [],
 		});
@@ -21,7 +21,7 @@ describe('mapEntriesToRandomTable', () => {
 		const result = mapEntriesToRandomTable(entries);
 
 		expect(result).toEqual({
-			diceSize: 1,
+			diceSize: [1],
 			type: 'single',
 			table: [{
 				value: 1,
@@ -37,7 +37,7 @@ describe('mapEntriesToRandomTable', () => {
 		const result = mapEntriesToRandomTable(entries);
 
 		expect(result).toEqual({
-			diceSize: 2,
+			diceSize: [2],
 			type: 'single',
 			table: [
 				{
@@ -59,7 +59,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(6);
+		expect(result.diceSize).toStrictEqual([6]);
 		expect(result.type).toStrictEqual('range');
 		expect(result.table).toHaveLength(3);
 
@@ -78,7 +78,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(4);
+		expect(result.diceSize).toStrictEqual([4]);
 		expect(result.type).toStrictEqual('single');
 		expect(result.table).toHaveLength(4);
 
@@ -93,7 +93,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(10);
+		expect(result.diceSize).toStrictEqual([10]);
 		expect(result.type).toStrictEqual('range');
 		expect(result.table).toHaveLength(5);
 
@@ -114,7 +114,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(6);
+		expect(result.diceSize).toStrictEqual([6]);
 		expect(result.type).toStrictEqual('single');
 		expect(result.table).toHaveLength(6);
 
@@ -129,7 +129,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(100);
+		expect(result.diceSize).toStrictEqual([100]);
 		expect(result.type).toStrictEqual('range');
 		expect(result.table).toHaveLength(7);
 
@@ -160,7 +160,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(8);
+		expect(result.diceSize).toStrictEqual([8]);
 		expect(result.type).toStrictEqual('single');
 		expect(result.table).toHaveLength(8);
 
@@ -170,12 +170,48 @@ describe('mapEntriesToRandomTable', () => {
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 
+	test('should map 9 entries to a d6 & d6 table', () => {
+		const entries = range(9).map(i => `Result ${i + 1}`);
+
+		const result = mapEntriesToRandomTable(entries);
+
+		expect(result.diceSize).toStrictEqual([6, 6]);
+		expect(result.type).toBe('range-range');
+		expect(result.table).toHaveLength(9);
+
+		const table = result.table;
+		expect(table.map(({ value }) => value)).toStrictEqual([
+			[1, 2],
+			[1, 2],
+			[1, 2],
+			[3, 4],
+			[3, 4],
+			[3, 4],
+			[5, 6],
+			[5, 6],
+			[5, 6],
+		]);
+		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+			[1, 2],
+			[3, 4],
+			[5, 6],
+		]);
+		expect(table.map(({ odds }) => odds)).toEqual(range(9).map(() => 11.11111111111111));
+		expect(table.map(({ result }) => result)).toEqual(entries);
+	});
+
 	test('should map 11 entries to a d100 table', () => {
 		const entries = Array(11).fill(0).map((_, i) => `Result ${i + 1}`);
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(100);
+		expect(result.diceSize).toStrictEqual([100]);
 		expect(result.type).toStrictEqual('range');
 		expect(result.table).toHaveLength(11);
 
@@ -214,7 +250,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(100);
+		expect(result.diceSize).toStrictEqual([100]);
 		expect(result.type).toStrictEqual('range');
 		expect(result.table).toHaveLength(13);
 
@@ -257,7 +293,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(100);
+		expect(result.diceSize).toStrictEqual([100]);
 		expect(result.type).toStrictEqual('range');
 		expect(result.table).toHaveLength(50);
 
@@ -274,7 +310,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		const result = mapEntriesToRandomTable(entries);
 
-		expect(result.diceSize).toStrictEqual(100);
+		expect(result.diceSize).toStrictEqual([100]);
 		expect(result.type).toStrictEqual('single');
 		expect(result.table).toHaveLength(100);
 
