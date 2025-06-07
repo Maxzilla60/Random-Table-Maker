@@ -44,7 +44,7 @@
 	<h1>Random Table Maker</h1>
 
 	{#if $table$}
-		{@const { diceSize, type, table } = $table$}
+		{@const { diceSize, table } = $table$}
 		<table>
 			<thead>
 			<tr>
@@ -64,7 +64,7 @@
 				{@const { value, odds, result } = entry}
 				<tr>
 					<td>
-						<DiceValue type={type} value={value}/>
+						<DiceValue value={value}/>
 					</td>
 					<td>{odds.toFixed(2)}%</td>
 					<td>{result}</td>

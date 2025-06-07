@@ -1,23 +1,17 @@
 <script lang="ts">
-	type SingleProps = {
-		type: 'single';
-		value: number | string;
+	import { isArray } from 'lodash';
+
+	type Props = {
+		value: number | string | [number, number];
 	}
 
-	type RangeProps = {
-		type: 'range';
-		value: [number, number];
-	}
-
-	type Props = SingleProps | RangeProps;
-
-	const { type, value }: Props = $props();
+	const { value }: Props = $props();
 </script>
 
 <span>
-	{#if type === 'single'}
-		{value}
-	{:else if type === 'range'}
+	{#if isArray(value)}
 		{value[0]}-{value[1]}
+	{:else }
+		{value}
 	{/if}
 </span>
