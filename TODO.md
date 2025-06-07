@@ -2,7 +2,7 @@
 - [ ] Styling
 - [ ] Export
 - [ ] Editing
-- [ ] Drag & drop reordering
+- [x] Drag & drop reordering
 - [ ] Dice
     - [ ] No coins
     - [ ] DCC dice

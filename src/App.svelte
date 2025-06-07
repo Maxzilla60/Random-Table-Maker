@@ -1,13 +1,41 @@
 <script lang="ts">
-	import { derived, writable } from 'svelte/store';
+	import { derived, get, writable } from 'svelte/store';
 	import DiceValue from './components/DiceValue.svelte';
-	import { addEntry, entries$, removeEntry } from './state/entries';
+	import { addEntry, entries$, removeEntry, reorderEntries } from './state/entries';
 	import { MAX_TABLE_LENGTH } from './util/constants';
 	import { mapEntriesToRandomTable } from './util/map-entries-to-random-table';
 
-	const newEntryInput$ = writable<string>('');
-
 	const table$ = derived(entries$, mapEntriesToRandomTable);
+	const newEntryInput$ = writable<string>('');
+	const draggingIndex$ = writable<number | null>(null);
+
+	function handleDragStart(event: DragEvent, index: number): void {
+		draggingIndex$.set(index);
+		if (event.dataTransfer) {
+			event.dataTransfer.effectAllowed = 'move';
+			event.dataTransfer.setData('text/plain', index.toString());
+		}
+	}
+
+	function handleDragOver(event: DragEvent): void {
+		event.preventDefault();
+		if (event.dataTransfer) {
+			event.dataTransfer.dropEffect = 'move';
+		}
+	}
+
+	function handleDrop(event: DragEvent, targetIndex: number): void {
+		event.preventDefault();
+		const draggingIndex = get(draggingIndex$);
+		if (draggingIndex !== null && draggingIndex !== targetIndex) {
+			reorderEntries(draggingIndex, targetIndex);
+		}
+		draggingIndex$.set(null);
+	}
+
+	function handleDragEnd(): void {
+		draggingIndex$.set(null);
+	}
 </script>
 
 <main>
@@ -19,6 +47,7 @@
 		<table>
 			<thead>
 			<tr>
+				<th>Reorder</th>
 				<th colspan={secondDie ? 2 : 1}>
 					{#if firstDie === 2}
 						coin
@@ -40,7 +69,18 @@
 			<tbody>
 			{#each table as entry, index}
 				{@const { value, secondValue, odds, result } = entry}
-				<tr>
+				<tr
+					class={$draggingIndex$ === index ? 'dragging' : ''}
+					ondragover={handleDragOver}
+					ondrop={e => handleDrop(e, index)}
+				>
+					<td
+						draggable="true"
+						ondragstart={e => handleDragStart(e, index)}
+						ondragend={handleDragEnd}
+					>
+						↕️
+					</td>
 					<td>
 						<DiceValue value={value}/>
 					</td>
@@ -57,6 +97,7 @@
 				</tr>
 			{/each}
 			<tr>
+				<td></td>
 				<td></td>
 				{#if secondDie}
 					<td></td>
@@ -91,3 +132,14 @@
 		</table>
 	{/if}
 </main>
+
+<style>
+    tr.dragging {
+        opacity: 0.5;
+        background-color: cadetblue;
+    }
+
+    tr[draggable="true"] {
+        cursor: move;
+    }
+</style>
