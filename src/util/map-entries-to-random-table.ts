@@ -9,6 +9,7 @@ export type SingleRandomTable = {
 	table: {
 		value: number | string;
 		secondValue?: undefined;
+		rowspan?: undefined;
 		odds: number;
 		result: string;
 	}[];
@@ -20,6 +21,7 @@ export type RangeRandomTable = {
 	table: {
 		value: [number, number];
 		secondValue?: undefined;
+		rowspan?: undefined;
 		odds: number;
 		result: string;
 	}[];
@@ -29,8 +31,9 @@ export type SingleSingleRandomTable = {
 	diceSize: DiceSize;
 	type: 'single-single';
 	table: {
-		value: number;
+		value?: number;
 		secondValue: number;
+		rowspan?: number;
 		odds: number;
 		result: string;
 	}[];
@@ -40,8 +43,9 @@ export type SingleRangeRandomTable = {
 	diceSize: DiceSize;
 	type: 'single-range';
 	table: {
-		value: number;
+		value?: number;
 		secondValue: [number, number];
+		rowspan?: number;
 		odds: number;
 		result: string;
 	}[];
@@ -51,8 +55,9 @@ export type RangeRangeRandomTable = {
 	diceSize: DiceSize;
 	type: 'range-range';
 	table: {
-		value: [number, number];
+		value?: [number, number];
 		secondValue: [number, number];
+		rowspan?: number;
 		odds: number;
 		result: string;
 	}[];
@@ -164,22 +169,26 @@ type Value = number
 	| [number, number][]
 	| [number, [number, number]];
 
-function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], index: number, diceSize: DiceSize) {
+function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], index: number, [firstDie, secondDie]: DiceSize) {
 	if (type === 'range') {
 		const rangeValue = value as [number, number];
 		return {
 			value: rangeValue,
-			odds: (rangeValue[1] - rangeValue[0] + 1) / diceSize[0]! * 100,
+			odds: (rangeValue[1] - rangeValue[0] + 1) / firstDie! * 100,
 			result: entries[index],
 		};
 	}
 
+	const divisor = greatestCommonDivisor(secondDie!, entries.length);
+	const hasRowSpan = index % divisor === 0;
+
 	if (type === 'single-single') {
 		const [firstValue, secondValue] = value as [number, number];
 		return {
-			value: firstValue,
+			value: hasRowSpan ? firstValue : undefined,
 			secondValue,
 			odds: 100 / entries.length,
+			rowspan: hasRowSpan ? divisor : undefined,
 			result: entries[index],
 		};
 	}
@@ -188,9 +197,10 @@ function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], i
 		const firstValue = value as number;
 		const rangeValue = first(value as [number, number][]);
 		return {
-			value: firstValue,
+			value: hasRowSpan ? firstValue : undefined,
 			secondValue: rangeValue,
 			odds: 100 / entries.length,
+			rowspan: hasRowSpan ? divisor : undefined,
 			result: entries[index],
 		};
 	}
@@ -198,9 +208,10 @@ function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], i
 	if (type === 'range-range') {
 		const [firstRange, secondRange] = value as [number, number][];
 		return {
-			value: firstRange,
+			value: hasRowSpan ? firstRange : undefined,
 			secondValue: secondRange,
 			odds: 100 / entries.length,
+			rowspan: hasRowSpan ? divisor : undefined,
 			result: entries[index],
 		};
 	}

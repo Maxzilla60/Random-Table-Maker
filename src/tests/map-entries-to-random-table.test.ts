@@ -182,14 +182,14 @@ describe('mapEntriesToRandomTable', () => {
 		const table = result.table;
 		expect(table.map(({ value }) => value)).toStrictEqual([
 			[1, 2],
-			[1, 2],
-			[1, 2],
+			undefined,
+			undefined,
 			[3, 4],
-			[3, 4],
-			[3, 4],
+			undefined,
+			undefined,
 			[5, 6],
-			[5, 6],
-			[5, 6],
+			undefined,
+			undefined,
 		]);
 		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
 			[1, 2],
@@ -300,20 +300,20 @@ describe('mapEntriesToRandomTable', () => {
 		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual([
 			[1, 2],
-			[1, 2],
-			[1, 2],
-			[1, 2],
-			[1, 2],
+			undefined,
+			undefined,
+			undefined,
+			undefined,
 			[3, 4],
-			[3, 4],
-			[3, 4],
-			[3, 4],
-			[3, 4],
+			undefined,
+			undefined,
+			undefined,
+			undefined,
 			[5, 6],
-			[5, 6],
-			[5, 6],
-			[5, 6],
-			[5, 6],
+			undefined,
+			undefined,
+			undefined,
+			undefined,
 		]);
 		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
 			[1, 2],
@@ -346,10 +346,24 @@ describe('mapEntriesToRandomTable', () => {
 		expect(result.table).toHaveLength(16);
 
 		const table = result.table;
-		expect(table.map(({ value }) => value)).toEqual(concat(
-			range(8).map(() => 'heads'),
-			range(8).map(() => 'tails'),
-		));
+		expect(table.map(({ value }) => value)).toEqual([
+			'heads',
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			'tails',
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+		]);
 		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual(concat(
 			range(8).map(i => i + 1),
 			range(8).map(i => i + 1),
@@ -370,23 +384,23 @@ describe('mapEntriesToRandomTable', () => {
 		const table = result.table;
 		expect(table.map(({ value }) => value)).toEqual([
 			1,
-			1,
-			1,
-			2,
-			2,
-			2,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
 			3,
-			3,
-			3,
-			4,
-			4,
-			4,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
 			5,
-			5,
-			5,
-			6,
-			6,
-			6,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
 		]);
 		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
 			[1, 2],

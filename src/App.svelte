@@ -89,7 +89,7 @@
 
 			<tbody>
 			{#each table as entry, index}
-				{@const { value, secondValue, odds, result } = entry}
+				{@const { value, secondValue, rowspan, odds, result } = entry}
 				<tr
 					class={$draggingIndex$ === index ? 'dragging' : ''}
 					ondragover={handleDragOver}
@@ -104,9 +104,11 @@
 							↕️
 						</td>
 					{/if}
-					<td>
-						<DiceValue value={value}/>
-					</td>
+					{#if value}
+						<td rowspan={rowspan}>
+							<DiceValue value={value}/>
+						</td>
+					{/if}
 					{#if secondValue}
 						<td>
 							<DiceValue value={secondValue}/>
