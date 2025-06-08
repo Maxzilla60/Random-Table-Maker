@@ -1,43 +1,15 @@
 <script lang="ts">
-	import { derived, get, writable } from 'svelte/store';
+	import { derived, writable } from 'svelte/store';
 	import { MAX_TABLE_LENGTH } from './lib/constants';
 	import { mapEntriesToRandomTable } from './lib/mapEntriesToRandomTable';
-	import { addEntry, entries$, removeEntry, reorderEntries } from './state/entries';
+	import { draggingIndex$, handleDragEnd, handleDragOver, handleDragStart, handleDrop } from './state/drag-drop';
+	import { addEntry, entries$, removeEntry } from './state/entries';
 
 	const table$ = derived(entries$, mapEntriesToRandomTable);
 	const newEntryInput$ = writable<string>('');
-	const draggingIndex$ = writable<number | null>(null);
 
 	const showOdds$ = writable<boolean>(false);
 	const showReorder$ = writable<boolean>(false);
-
-	function handleDragStart(event: DragEvent, index: number): void {
-		draggingIndex$.set(index);
-		if (event.dataTransfer) {
-			event.dataTransfer.effectAllowed = 'move';
-			event.dataTransfer.setData('text/plain', index.toString());
-		}
-	}
-
-	function handleDragOver(event: DragEvent): void {
-		event.preventDefault();
-		if (event.dataTransfer) {
-			event.dataTransfer.dropEffect = 'move';
-		}
-	}
-
-	function handleDrop(event: DragEvent, targetIndex: number): void {
-		event.preventDefault();
-		const draggingIndex = get(draggingIndex$);
-		if (draggingIndex !== null && draggingIndex !== targetIndex) {
-			reorderEntries(draggingIndex, targetIndex);
-		}
-		draggingIndex$.set(null);
-	}
-
-	function handleDragEnd(): void {
-		draggingIndex$.set(null);
-	}
 </script>
 
 <main>
@@ -177,7 +149,8 @@
 							newEntryInput$.set('');
 						}}
 						disabled={$entries$.length >= MAX_TABLE_LENGTH}
-					>➕
+					>
+						➕
 					</button>
 				</td>
 			</tr>
