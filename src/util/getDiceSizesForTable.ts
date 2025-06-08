@@ -36,9 +36,5 @@ export function getDiceSizesForTable(entries: string[]): DiceSizes {
 		.find(([firstSize, secondSize]) => (firstSize * secondSize) % entries.length === 0)
 		.value() as [DiceSize, DiceSize] | undefined;
 
-	if (doubleFit) {
-		return doubleFit;
-	}
-
-	return [100];
+	return doubleFit ?? [];
 }

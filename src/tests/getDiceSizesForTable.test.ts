@@ -1,7 +1,7 @@
 import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
 import { MAX_TABLE_LENGTH } from '../util/constants';
-import { getDiceSizesForTable } from '../util/get-dice-sizes-for-table';
+import { getDiceSizesForTable } from '../util/getDiceSizesForTable';
 
 const tableLengthsNotMappedToAD100 = [
 	{
@@ -69,6 +69,10 @@ const tableLengthsNotMappedToAD100 = [
 		expectedSize: [2, 12],
 	},
 	{
+		tableLength: 25,
+		expectedSize: [100],
+	},
+	{
 		tableLength: 30,
 		expectedSize: [6, 10],
 	},
@@ -98,7 +102,7 @@ const testData = range(MAX_TABLE_LENGTH).map(tableLength => {
 
 	return {
 		tableLength,
-		expectedSize: [100],
+		expectedSize: [],
 	};
 });
 

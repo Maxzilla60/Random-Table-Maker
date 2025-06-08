@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { derived, get, writable } from 'svelte/store';
-	import DiceValue from './components/DiceValue.svelte';
 	import { addEntry, entries$, removeEntry, reorderEntries } from './state/entries';
 	import { MAX_TABLE_LENGTH } from './util/constants';
-	import { mapEntriesToRandomTable } from './util/map-entries-to-random-table';
+	import { mapEntriesToRandomTable } from './util/mapEntriesToRandomTable';
 
 	const table$ = derived(entries$, mapEntriesToRandomTable);
 	const newEntryInput$ = writable<string>('');
@@ -57,7 +56,7 @@
 	</details>
 
 	{#if $table$}
-		{@const { diceSize, table } = $table$}
+		{@const { diceSize, type, table } = $table$}
 		{@const [firstDie, secondDie] = diceSize}
 		<table>
 			<thead>
@@ -88,41 +87,64 @@
 			</thead>
 
 			<tbody>
-			{#each table as entry, index}
-				{@const { value, secondValue, rowspan, odds, result } = entry}
-				<tr
-					class={$draggingIndex$ === index ? 'dragging' : ''}
-					ondragover={handleDragOver}
-					ondrop={e => handleDrop(e, index)}
-				>
-					{#if $showReorder$}
-						<td
-							draggable="true"
-							ondragstart={e => handleDragStart(e, index)}
-							ondragend={handleDragEnd}
-						>
-							↕️
-						</td>
-					{/if}
-					{#if value}
-						<td rowspan={rowspan}>
-							<DiceValue value={value}/>
-						</td>
-					{/if}
-					{#if secondValue}
+			{#if type === 'solved-double'}
+				{#each table as entry, index}
+					{@const { firstValue, secondValue, rowspan, odds, result } = entry}
+					<tr
+						class={$draggingIndex$ === index ? 'dragging' : ''}
+						ondragover={handleDragOver}
+						ondrop={e => handleDrop(e, index)}
+					>
+						{#if $showReorder$}
+							<td
+								draggable="true"
+								ondragstart={e => handleDragStart(e, index)}
+								ondragend={handleDragEnd}
+							>
+								↕️
+							</td>
+						{/if}
+						{#if rowspan}
+							<td rowspan={rowspan}>{ firstValue }</td>
+						{/if}
+						<td>{ secondValue }</td>
+						{#if $showOdds$}
+							<td>{odds.toFixed(2)}%</td>
+						{/if}
+						<td>{result}</td>
 						<td>
-							<DiceValue value={secondValue}/>
+							<button onclick={() => removeEntry(index)}>🗑️</button>
 						</td>
-					{/if}
-					{#if $showOdds$}
-						<td>{odds.toFixed(2)}%</td>
-					{/if}
-					<td>{result}</td>
-					<td>
-						<button onclick={() => removeEntry(index)}>🗑️</button>
-					</td>
-				</tr>
-			{/each}
+					</tr>
+				{/each}
+			{:else}
+				{#each table as entry, index}
+					{@const { value, odds, result } = entry}
+					<tr
+						class={$draggingIndex$ === index ? 'dragging' : ''}
+						ondragover={handleDragOver}
+						ondrop={e => handleDrop(e, index)}
+					>
+						{#if $showReorder$}
+							<td
+								draggable="true"
+								ondragstart={e => handleDragStart(e, index)}
+								ondragend={handleDragEnd}
+							>
+								↕️
+							</td>
+						{/if}
+						<td>{ value }</td>
+						{#if $showOdds$}
+							<td>{odds.toFixed(2)}%</td>
+						{/if}
+						<td>{result}</td>
+						<td>
+							<button onclick={() => removeEntry(index)}>🗑️</button>
+						</td>
+					</tr>
+				{/each}
+			{/if}
 			<tr>
 				{#if $showReorder$}
 					<td></td>
@@ -170,7 +192,7 @@
         background-color: cadetblue;
     }
 
-    tr[draggable="true"] {
+    tr[draggable=true] {
         cursor: move;
     }
 </style>
