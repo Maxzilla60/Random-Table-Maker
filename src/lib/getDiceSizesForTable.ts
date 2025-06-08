@@ -1,19 +1,6 @@
 import { chain } from 'lodash';
-
-export const DICE_SIZES = [
-	2,
-	4,
-	6,
-	8,
-	10,
-	12,
-	20,
-	100,
-] as const;
-
-export type DiceSize = 0 | 1 | typeof DICE_SIZES[number];
-
-export type DiceSizes = [] | [DiceSize] | [DiceSize, DiceSize];
+import { DICE_SIZES } from './constants';
+import type { DiceSize, DiceSizes } from './types';
 
 export function getDiceSizesForTable(entries: string[]): DiceSizes {
 	if (entries.length === 0) {

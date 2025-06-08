@@ -1,4 +1,5 @@
 - [x] LocalStorage
+- [ ] Show warning if 'forced'
 - [ ] Styling
 - [ ] Export
 - [ ] Editing

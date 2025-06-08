@@ -1,6 +1,7 @@
 import { concat, range } from 'lodash';
 import { describe, expect, test } from 'vitest';
-import { type Forced100RandomTable, mapEntriesToRandomTable, type SolvedDoubleRandomTable, type SolvedSingleRandomTable } from '../lib/mapEntriesToRandomTable';
+import { mapEntriesToRandomTable } from '../lib/mapEntriesToRandomTable';
+import type { Forced100RandomTable, SolvedDoubleRandomTable, SolvedSingleRandomTable } from '../lib/types';
 
 describe('mapEntriesToRandomTable', () => {
 	test('should map empty entries', () => {
