@@ -30,6 +30,7 @@
 	{#if $table$}
 		{@const { diceSize, type, table } = $table$}
 		{@const [firstDie, secondDie] = diceSize}
+
 		<table>
 			<thead>
 			<tr>
@@ -48,6 +49,11 @@
 						{:else}
 							& d{ secondDie }
 						{/if}
+					{/if}
+					{#if type === 'forced'}
+						<span title="Warning: This d100 table is 'forced' and does not have equal odds! Entries near the top of the table will have slightly higher odds (toggle on the odds in the settings).">
+							(⚠️)
+						</span>
 					{/if}
 				</th>
 				{#if $showOdds$}
