@@ -35,6 +35,25 @@ export type SolvedDoubleRandomTable = {
 
 export type RandomTable = Forced100RandomTable | SolvedSingleRandomTable | SolvedDoubleRandomTable;
 
+type StartAndEnd = { start: number, end: number };
+
+function mapRangesToValues(ranges: number[]): string[] {
+	return ranges
+		.reduce((values, valueRange): StartAndEnd[] => {
+			const start = values.at(-1)?.end ?? 0;
+			const end = start + valueRange;
+
+			return [
+				...values,
+				{
+					start: start + 1,
+					end,
+				},
+			];
+		}, [] as StartAndEnd[])
+		.map(({ start, end }: StartAndEnd) => start === end ? `${start}` : `${start}-${end}`);
+}
+
 export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 	if (entries.length === 0) {
 		return {
@@ -76,38 +95,34 @@ export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 }
 
 function createForcedTable(entries: string[]): Forced100RandomTable {
+	const diceSize: [100] = [100];
 	const valueRange = floor(100 / entries.length);
 	const remainder = 100 % entries.length;
 	const spreadRemainder = curry(spreadRemainderFn)(remainder);
 
-	const tableEntries = chain(entries.length)
+	const ranges = chain(entries.length)
 		.range()
 		.fill(valueRange)
-		.thru(spreadRemainder)
-		.reduce((values, valueRange): { start: number, end: number, odds: number }[] => {
-			const start = values.at(-1)?.end ?? 0;
-			const end = start + valueRange;
+		.thru(spreadRemainder);
 
-			return [
-				...values,
-				{
-					start: start + 1,
-					end,
-					odds: valueRange,
-				},
-			];
-		}, [] as { start: number, end: number, odds: number }[])
-		.map(({ start, end, odds }, index): SingleTableEntry => ({
-			value: `${start}-${end}`,
-			odds,
-			result: entries[index],
+	const table = ranges
+		.thru(mapRangesToValues)
+		.zip(entries)
+		.map(([value, result]) => ({
+			value,
+			result,
 		}))
-		.value();
+		.zip(ranges.value())
+		.map(([valueAndResult, odds]) => ({
+			...valueAndResult,
+			odds,
+		}))
+		.value() as SingleTableEntry[];
 
 	return {
 		type: 'forced',
-		diceSize: [100],
-		table: tableEntries,
+		diceSize,
+		table,
 	};
 }
 
@@ -123,89 +138,38 @@ function spreadRemainderFn(remainder: number, values: number[], index = 0): numb
 }
 
 function createSolvedSingleTable(entries: string[], diceSize: DiceSize): SolvedSingleRandomTable {
-	const tableEntries = chain(entries.length)
+	const table = chain(entries.length)
 		.range()
 		.fill(diceSize / entries.length)
-		.reduce((values, valueRange): { start: number, end: number }[] => {
-			const start = values.at(-1)?.end ?? 0;
-			const end = start + valueRange;
-
-			return [
-				...values,
-				{
-					start: start + 1,
-					end,
-				},
-			];
-		}, [] as { start: number, end: number }[])
-		.map(({ start, end }) => start === end ? String(start) : `${start}-${end}`)
-		.map((value, index): SingleTableEntry => ({
+		.thru(mapRangesToValues)
+		.zip(entries)
+		.map(([value, result]) => ({
 			value,
 			odds: 100 / entries.length,
-			result: entries[index],
+			result,
 		}))
-		.value();
+		.value() as SingleTableEntry[];
 
 	return {
 		type: 'solved-single',
 		diceSize: [diceSize],
-		table: tableEntries,
+		table,
 	};
 }
 
 function createSolvedDoubleTable(entries: string[], diceSizes: [DiceSize, DiceSize]): SolvedDoubleRandomTable {
 	const [firstDie, secondDie] = diceSizes;
+	const gdc = greatestCommonDivisor(entries.length, firstDie);
 
-	const firstGDC = greatestCommonDivisor(entries.length, firstDie);
-	let firstValues: string[] = [];
-	if (firstDie === 2) {
-		firstValues = ['heads', 'tails'];
-	} else {
-		firstValues = chain(firstGDC)
-			.range()
-			.fill(firstDie / firstGDC)
-			.reduce((values, valueRange): { start: number, end: number }[] => {
-				const start = values.at(-1)?.end ?? 0;
-				const end = start + valueRange;
-
-				return [
-					...values,
-					{
-						start: start + 1,
-						end,
-					},
-				];
-			}, [] as { start: number, end: number }[])
-			.map(({ start, end }) => start === end ? String(start) : `${start}-${end}`)
-			.value();
-	}
-
-	const secondValues = chain(entries.length / firstGDC)
-		.range()
-		.fill(secondDie / (entries.length / firstGDC))
-		.reduce((values, valueRange): { start: number, end: number }[] => {
-			const start = values.at(-1)?.end ?? 0;
-			const end = start + valueRange;
-
-			return [
-				...values,
-				{
-					start: start + 1,
-					end,
-				},
-			];
-		}, [] as { start: number, end: number }[])
-		.map(({ start, end }) => start === end ? String(start) : `${start}-${end}`)
-		.value();
+	const firstValues = firstDie === 2 ? ['heads', 'tails'] : createOneOfDoubleValues(gdc, firstDie / gdc);
+	const secondValues = createOneOfDoubleValues(entries.length / gdc, secondDie / (entries.length / gdc));
 
 	const table: SolvedDoubleTableEntry[] = firstValues
-		.map(firstValue => {
-			return secondValues.map((secondValue, index) => ({
-				firstValue,
-				secondValue,
-				rowspan: index === 0 ? secondValues.length : undefined,
-			}));
-		})
+		.map(firstValue => secondValues.map((secondValue, index) => ({
+			firstValue,
+			secondValue,
+			rowspan: index === 0 ? secondValues.length : undefined,
+		})))
 		.flat()
 		.map((entry, index) => ({
 			...entry,
@@ -218,4 +182,12 @@ function createSolvedDoubleTable(entries: string[], diceSizes: [DiceSize, DiceSi
 		diceSize: diceSizes,
 		table,
 	};
+}
+
+export function createOneOfDoubleValues(rangeValue: number, fillValue: number): string[] {
+	return chain(rangeValue)
+		.range()
+		.fill(fillValue)
+		.thru(mapRangesToValues)
+		.value();
 }
