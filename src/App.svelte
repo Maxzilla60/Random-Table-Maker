@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { derived, get, writable } from 'svelte/store';
+	import { MAX_TABLE_LENGTH } from './lib/constants';
+	import { mapEntriesToRandomTable } from './lib/mapEntriesToRandomTable';
 	import { addEntry, entries$, removeEntry, reorderEntries } from './state/entries';
-	import { MAX_TABLE_LENGTH } from './util/constants';
-	import { mapEntriesToRandomTable } from './util/mapEntriesToRandomTable';
 
 	const table$ = derived(entries$, mapEntriesToRandomTable);
 	const newEntryInput$ = writable<string>('');

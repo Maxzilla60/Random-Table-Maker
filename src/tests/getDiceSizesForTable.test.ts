@@ -1,7 +1,7 @@
 import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
-import { MAX_TABLE_LENGTH } from '../util/constants';
-import { getDiceSizesForTable } from '../util/getDiceSizesForTable';
+import { MAX_TABLE_LENGTH } from '../lib/constants';
+import { getDiceSizesForTable } from '../lib/getDiceSizesForTable';
 
 const tableLengthsNotMappedToAD100 = [
 	{

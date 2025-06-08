@@ -1,6 +1,6 @@
 import { concat, filter, identity } from 'lodash';
 import { derived, type Readable, type Writable, writable } from 'svelte/store';
-import { MAX_TABLE_LENGTH } from '../util/constants';
+import { MAX_TABLE_LENGTH } from '../lib/constants';
 
 const LOCAL_STORAGE_KEY = 'random-table-maker-entries';
 const DEFAULT_ENTRIES = [
