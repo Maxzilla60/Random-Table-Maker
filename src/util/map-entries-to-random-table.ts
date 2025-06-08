@@ -1,10 +1,10 @@
 import { chain, first, floor, last, type List } from 'lodash';
-import { type DiceSize, type DiceSizeContent, getDiceSizesForTable } from './get-dice-sizes-for-table';
+import { type DiceSize, type DiceSizes, getDiceSizesForTable } from './get-dice-sizes-for-table';
 import { type DiceValueType, getDiceValueTypeForTable } from './get-dice-value-type-for-table';
 import { greatestCommonDivisor } from './greatestCommonDivisor';
 
 export type SingleRandomTable = {
-	diceSize: DiceSize;
+	diceSize: DiceSizes;
 	type: 'single';
 	table: {
 		value: number | string;
@@ -16,7 +16,7 @@ export type SingleRandomTable = {
 }
 
 export type RangeRandomTable = {
-	diceSize: DiceSize;
+	diceSize: DiceSizes;
 	type: 'range';
 	table: {
 		value: [number, number];
@@ -28,7 +28,7 @@ export type RangeRandomTable = {
 }
 
 export type SingleSingleRandomTable = {
-	diceSize: DiceSize;
+	diceSize: DiceSizes;
 	type: 'single-single';
 	table: {
 		value?: number;
@@ -40,7 +40,7 @@ export type SingleSingleRandomTable = {
 }
 
 export type RangeRangeRandomTable = {
-	diceSize: DiceSize;
+	diceSize: DiceSizes;
 	type: 'range-range';
 	table: {
 		value?: [number, number];
@@ -129,7 +129,7 @@ export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 	return { diceSize: diceSizes, type, table: [] } as RandomTable;
 }
 
-function createChunks(diceSize: DiceSizeContent, entries: string[], chunkSize: number): (number | [number, number])[] {
+function createChunks(diceSize: DiceSize, entries: string[], chunkSize: number): (number | [number, number])[] {
 	return chain(diceSize)
 		.range()
 		.map(i => i + 1)
@@ -139,7 +139,7 @@ function createChunks(diceSize: DiceSizeContent, entries: string[], chunkSize: n
 		.value();
 }
 
-function mapChunkToRangeTuple(chunk: number[], allChunks: List<number[]>, entries: string[], index: number, diceSize: DiceSizeContent): number | [number, number] {
+function mapChunkToRangeTuple(chunk: number[], allChunks: List<number[]>, entries: string[], index: number, diceSize: DiceSize): number | [number, number] {
 	if (chunk.length === 1) {
 		return first(chunk)!;
 	}
@@ -156,7 +156,7 @@ type Value = number
 	| [number, number][]
 	| [number, [number, number]];
 
-function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], index: number, [firstDie, secondDie]: DiceSize) {
+function mapToTableEntry(type: DiceValueType, value: Value, entries: string[], index: number, [firstDie, secondDie]: DiceSizes) {
 	if (type === 'range') {
 		const rangeValue = value as [number, number];
 		return {

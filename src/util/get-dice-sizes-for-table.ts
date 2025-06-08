@@ -11,11 +11,11 @@ export const DICE_SIZES = [
 	100,
 ] as const;
 
-export type DiceSizeContent = 0 | 1 | typeof DICE_SIZES[number];
+export type DiceSize = 0 | 1 | typeof DICE_SIZES[number];
 
-export type DiceSize = [] | [DiceSizeContent] | [DiceSizeContent, DiceSizeContent];
+export type DiceSizes = [] | [DiceSize] | [DiceSize, DiceSize];
 
-export function getDiceSizesForTable(entries: string[]): DiceSize {
+export function getDiceSizesForTable(entries: string[]): DiceSizes {
 	if (entries.length === 0) {
 		return [0];
 	}
@@ -34,7 +34,7 @@ export function getDiceSizesForTable(entries: string[]): DiceSize {
 		.map(firstSize => DICE_SIZES.map(secondSize => [firstSize, secondSize]))
 		.flatMap()
 		.find(([firstSize, secondSize]) => (firstSize * secondSize) % entries.length === 0)
-		.value() as [DiceSizeContent, DiceSizeContent] | undefined;
+		.value() as [DiceSize, DiceSize] | undefined;
 
 	if (doubleFit) {
 		return doubleFit;
