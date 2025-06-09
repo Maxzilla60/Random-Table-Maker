@@ -12,49 +12,61 @@ describe('getDiceSizesForTable', () => {
 			preferLargerDice: false,
 		};
 
-		const tableLengthsNotMappedToAD100 = [
-			{ tableLength: 0, expectedSize: [0] },
-			{ tableLength: 1, expectedSize: [1] },
-			{ tableLength: 2, expectedSize: [2] },
-			{ tableLength: 3, expectedSize: [6] },
-			{ tableLength: 4, expectedSize: [4] },
-			{ tableLength: 5, expectedSize: [10] },
-			{ tableLength: 6, expectedSize: [6] },
-			{ tableLength: 8, expectedSize: [8] },
-			{ tableLength: 9, expectedSize: [6, 6] },
-			{ tableLength: 10, expectedSize: [10] },
-			{ tableLength: 12, expectedSize: [12] },
-			{ tableLength: 15, expectedSize: [6, 10] },
-			{ tableLength: 16, expectedSize: [2, 8] },
-			{ tableLength: 18, expectedSize: [6, 6] },
-			{ tableLength: 20, expectedSize: [20] },
-			{ tableLength: 24, expectedSize: [2, 12] },
-			{ tableLength: 25, expectedSize: [100] },
-			{ tableLength: 30, expectedSize: [6, 10] },
-			{ tableLength: 32, expectedSize: [4, 8] },
-			{ tableLength: 36, expectedSize: [6, 6] },
-			{ tableLength: 40, expectedSize: [2, 20] },
-			{ tableLength: 48, expectedSize: [4, 12] },
+		const entriesLengthsNotMappedToAD100 = [
+			{ entriesLength: 0, expectedSize: [0] },
+			{ entriesLength: 1, expectedSize: [1] },
+			{ entriesLength: 2, expectedSize: [2] },
+			{ entriesLength: 3, expectedSize: [6] },
+			{ entriesLength: 4, expectedSize: [4] },
+			{ entriesLength: 5, expectedSize: [10] },
+			{ entriesLength: 6, expectedSize: [6] },
+			{ entriesLength: 8, expectedSize: [8] },
+			{ entriesLength: 9, expectedSize: [6, 6] },
+			{ entriesLength: 10, expectedSize: [10] },
+			{ entriesLength: 12, expectedSize: [12] },
+			{ entriesLength: 15, expectedSize: [6, 10] },
+			{ entriesLength: 16, expectedSize: [2, 8] },
+			{ entriesLength: 18, expectedSize: [6, 6] },
+			{ entriesLength: 20, expectedSize: [20] },
+			{ entriesLength: 24, expectedSize: [2, 12] },
+			{ entriesLength: 25, expectedSize: [100] },
+			{ entriesLength: 30, expectedSize: [6, 10] },
+			{ entriesLength: 32, expectedSize: [4, 8] },
+			{ entriesLength: 36, expectedSize: [6, 6] },
+			{ entriesLength: 40, expectedSize: [2, 20] },
+			{ entriesLength: 48, expectedSize: [4, 12] },
 		];
 
-		const defaultTestData = range(MAX_TABLE_LENGTH).map(tableLength => {
-			const notMappedTo100 = tableLengthsNotMappedToAD100.find(t => t.tableLength === tableLength);
+		const defaultTestData = range(MAX_TABLE_LENGTH).map(entriesLength => {
+			const notMappedTo100 = entriesLengthsNotMappedToAD100.find(t => t.entriesLength === entriesLength);
 			if (notMappedTo100) {
 				return notMappedTo100;
 			}
 
 			return {
-				tableLength,
+				entriesLength,
 				expectedSize: [],
 			};
 		});
 
-		test.each(defaultTestData)('table of length $tableLength should be mapped to a d$expectedSize', ({ tableLength, expectedSize }) => {
-			const table = new Array(tableLength);
-
-			const result = getDiceSizesForTable(table, defaultSettings);
+		test.each(defaultTestData)('table of length $entriesLength should be mapped to a d$expectedSize', ({ entriesLength, expectedSize }) => {
+			const result = getDiceSizesForTable(entriesLength, defaultSettings);
 
 			expect(result).toStrictEqual(expectedSize);
+		});
+
+		describe('disabling d2 dice size', () => {
+			const noD2Settings: Settings = {
+				enableDCCDice: false,
+				enableD2: false,
+				preferLargerDice: false,
+			};
+
+			test.each(defaultTestData)('table of length $entriesLength should be mapped to a d$expectedSize', ({ entriesLength }) => {
+				const result = getDiceSizesForTable(entriesLength, noD2Settings);
+				expect(result[0]).not.toBe(2);
+				expect(result[1]).not.toBe(2);
+			});
 		});
 	});
 
@@ -66,47 +78,26 @@ describe('getDiceSizesForTable', () => {
 		};
 
 		const dccTestData = [
-			{ tableLength: 3, expectedSize: [3] },
-			{ tableLength: 5, expectedSize: [5] },
-			{ tableLength: 7, expectedSize: [7] },
-			{ tableLength: 9, expectedSize: [3, 3] },
-			{ tableLength: 14, expectedSize: [14] },
-			{ tableLength: 15, expectedSize: [30] },
-			{ tableLength: 16, expectedSize: [16] },
-			{ tableLength: 18, expectedSize: [3, 6] },
-			{ tableLength: 21, expectedSize: [3, 7] },
-			{ tableLength: 24, expectedSize: [24] },
-			{ tableLength: 28, expectedSize: [2, 14] },
-			{ tableLength: 30, expectedSize: [30] },
-			{ tableLength: 32, expectedSize: [2, 16] },
-			{ tableLength: 35, expectedSize: [5, 7] },
+			{ entriesLength: 3, expectedSize: [3] },
+			{ entriesLength: 5, expectedSize: [5] },
+			{ entriesLength: 7, expectedSize: [7] },
+			{ entriesLength: 9, expectedSize: [3, 3] },
+			{ entriesLength: 14, expectedSize: [14] },
+			{ entriesLength: 15, expectedSize: [30] },
+			{ entriesLength: 16, expectedSize: [16] },
+			{ entriesLength: 18, expectedSize: [3, 6] },
+			{ entriesLength: 21, expectedSize: [3, 7] },
+			{ entriesLength: 24, expectedSize: [24] },
+			{ entriesLength: 28, expectedSize: [2, 14] },
+			{ entriesLength: 30, expectedSize: [30] },
+			{ entriesLength: 32, expectedSize: [2, 16] },
+			{ entriesLength: 35, expectedSize: [5, 7] },
 		];
 
-		test.each(dccTestData)('table of length $tableLength should be mapped to a d$expectedSize', ({ tableLength, expectedSize }) => {
-			const table = new Array(tableLength);
-
-			const result = getDiceSizesForTable(table, dccSettings);
+		test.each(dccTestData)('table of length $entriesLength should be mapped to a d$expectedSize', ({ entriesLength, expectedSize }) => {
+			const result = getDiceSizesForTable(entriesLength, dccSettings);
 
 			expect(result).toStrictEqual(expectedSize);
-		});
-	});
-
-	describe('disabling d2 dice size', () => {
-		const noD2Settings: Settings = {
-			enableDCCDice: false,
-			enableD2: false,
-			preferLargerDice: false,
-		};
-
-		const noD2TestData = [
-			{ tableLength: 2, expectedSize: [4] },
-			{ tableLength: 16, expectedSize: [4, 4] },
-		];
-
-		test.each(noD2TestData)('table of length $tableLength should be mapped to a d$expectedSize', ({ tableLength, expectedSize }) => {
-			const result = getDiceSizesForTable(new Array(tableLength).fill(''), noD2Settings);
-			expect(result[0]).not.toBe(2);
-			expect(result[1]).not.toBe(2);
 		});
 	});
 
@@ -118,18 +109,16 @@ describe('getDiceSizesForTable', () => {
 		};
 
 		const largerDiceTestData = [
-			{ tableLength: 3, expectedSize: [12] },
-			{ tableLength: 5, expectedSize: [100] },
-			{ tableLength: 4, expectedSize: [4] },
-			{ tableLength: 9, expectedSize: [12, 12] },
-			{ tableLength: 15, expectedSize: [100, 12] },
-			{ tableLength: 16, expectedSize: [100, 100] },
+			{ entriesLength: 3, expectedSize: [12] },
+			{ entriesLength: 5, expectedSize: [100] },
+			{ entriesLength: 4, expectedSize: [4] },
+			{ entriesLength: 9, expectedSize: [12, 12] },
+			{ entriesLength: 15, expectedSize: [100, 12] },
+			{ entriesLength: 16, expectedSize: [100, 100] },
 		];
 
-		test.each(largerDiceTestData)('table of length $tableLength should prefer larger dice and use d$expectedSize', ({ tableLength, expectedSize }) => {
-			const table = new Array(tableLength).fill('');
-
-			const result = getDiceSizesForTable(table, largerDiceSettings);
+		test.each(largerDiceTestData)('table of length $entriesLength should prefer larger dice and use d$expectedSize', ({ entriesLength, expectedSize }) => {
+			const result = getDiceSizesForTable(entriesLength, largerDiceSettings);
 
 			expect(result).toStrictEqual(expectedSize);
 		});

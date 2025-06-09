@@ -30,7 +30,7 @@ export function mapEntriesToRandomTable(entries: string[], settings: Settings): 
 		};
 	}
 
-	const diceSizes = getDiceSizesForTable(entries, settings);
+	const diceSizes = getDiceSizesForTable(entries.length, settings);
 
 	switch (diceSizes.length) {
 		case 0:

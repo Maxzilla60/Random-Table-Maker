@@ -2,25 +2,25 @@ import { chain, concat } from 'lodash';
 import { DCC_DICE_SIZES, DICE_SIZES } from './constants';
 import type { DiceSize, DiceSizes, Settings } from './types';
 
-export function getDiceSizesForTable(entries: string[], settings: Settings): DiceSizes {
-	if (entries.length === 0) {
+export function getDiceSizesForTable(entriesLength: number, settings: Settings): DiceSizes {
+	if (entriesLength === 0) {
 		return [0];
 	}
-	if (entries.length === 1) {
+	if (entriesLength === 1) {
 		return [1];
 	}
 
 	const diceSizes = getDiceSizes(settings);
 
 	const exactFit = diceSizes
-		.find(size => size === entries.length);
+		.find(size => size === entriesLength);
 
 	if (exactFit) {
 		return [exactFit];
 	}
 
 	const singleFit = diceSizes
-		.find(size => size % entries.length === 0);
+		.find(size => size % entriesLength === 0);
 
 	if (singleFit) {
 		return [singleFit];
@@ -29,7 +29,7 @@ export function getDiceSizesForTable(entries: string[], settings: Settings): Dic
 	const doubleFit = chain(diceSizes)
 		.map(firstSize => diceSizes.map(secondSize => [firstSize, secondSize]))
 		.flatMap()
-		.find(([firstSize, secondSize]) => (firstSize * secondSize) % entries.length === 0)
+		.find(([firstSize, secondSize]) => (firstSize * secondSize) % entriesLength === 0)
 		.value() as [DiceSize, DiceSize] | undefined;
 
 	return doubleFit ?? [];
