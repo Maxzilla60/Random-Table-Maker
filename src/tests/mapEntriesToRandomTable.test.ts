@@ -12,6 +12,7 @@ describe('mapEntriesToRandomTable', () => {
 		enableD2: true,
 		preferLargerDice: false,
 		mode: 'forced',
+		showOdds: false,
 	};
 
 	const rerollSettings: Settings = {
@@ -19,6 +20,7 @@ describe('mapEntriesToRandomTable', () => {
 		enableD2: true,
 		preferLargerDice: false,
 		mode: 'reroll',
+		showOdds: false,
 	};
 
 	beforeEach(() => {

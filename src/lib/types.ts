@@ -41,4 +41,5 @@ export type Settings = {
 	enableD2: boolean;
 	preferLargerDice: boolean;
 	mode: 'forced' | 'reroll';
+	showOdds: boolean;
 }

@@ -1,6 +1,6 @@
 - [x] LocalStorage
 - [ ] LocalStorage settings
-- [ ] Editing toggle
+- [x] Editing toggle
 - [x] Show warning if 'forced'
 - [ ] Animations (@formkit/auto-animate)
 - [ ] Export
