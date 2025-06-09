@@ -11,27 +11,27 @@ const DEFAULT_SETTINGS: Settings = {
 };
 
 const initialSettings = getInitialSettingsFromLocalStorage();
-export const enableDCCDice$ = writable<boolean>(initialSettings.enableDCCDice);
 export const enableD2$ = writable<boolean>(initialSettings.enableD2);
+export const enableDCCDice$ = writable<boolean>(initialSettings.enableDCCDice);
 export const preferLargerDice$ = writable<boolean>(initialSettings.preferLargerDice);
 export const mode$ = writable<Settings['mode']>(initialSettings.mode);
 export const showOdds$ = writable<boolean>(initialSettings.showOdds);
 
 export const settings$: Readable<Settings> = derived([
-	enableDCCDice$,
 	enableD2$,
+	enableDCCDice$,
 	preferLargerDice$,
 	mode$,
 	showOdds$,
 ], ([
-	    enableDCCDice,
 	    enableD2,
+	    enableDCCDice,
 	    preferLargerDice,
 	    mode,
 	    showOdds,
                                                          ]): Settings => ({
-	enableDCCDice,
 	enableD2,
+	enableDCCDice,
 	preferLargerDice,
 	mode,
 	showOdds,

@@ -37,8 +37,8 @@ export type DoubleRandomTable = {
 export type RandomTable = Forced100RandomTable | SingleRandomTable | DoubleRandomTable;
 
 export type Settings = {
-	enableDCCDice: boolean;
 	enableD2: boolean;
+	enableDCCDice: boolean;
 	preferLargerDice: boolean;
 	mode: 'forced' | 'reroll';
 	showOdds: boolean;
