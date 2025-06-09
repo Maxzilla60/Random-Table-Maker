@@ -1,6 +1,6 @@
-import type { DICE_SIZES } from './constants';
+import type { DCC_DICE_SIZES, DICE_SIZES } from './constants';
 
-export type DiceSize = 0 | 1 | typeof DICE_SIZES[number];
+export type DiceSize = 0 | 1 | typeof DICE_SIZES[number] | typeof DCC_DICE_SIZES[number];
 
 export type DiceSizes = [] | [DiceSize] | [DiceSize, DiceSize];
 

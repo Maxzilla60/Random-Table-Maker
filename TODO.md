@@ -4,13 +4,14 @@
 - [ ] Export
 - [ ] Editing
 - [x] Drag & drop reordering
+- [ ] Drag & drop libary? (https://www.reddit.com/r/sveltejs/comments/1181gte/drag_drop_in_svelte_hunting_for_libs/)
 - [ ] Dice
-    - [ ] No coins
-    - [ ] DCC dice
-    - [ ] Fudge dice
+  - [ ] No coins
+  - [x] DCC dice
+  - [ ] Fudge dice
 - [ ] Modes
-    - [ ] "Reroll" mode
-    - [ ] "Bell curve" mode
+  - [ ] "Reroll" mode
+  - [ ] "Bell curve" mode
 - [ ] Documentation
 - [ ] Svelte integration tests?
 - [ ] Copy-paste parsing

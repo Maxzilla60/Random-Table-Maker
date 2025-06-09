@@ -10,3 +10,13 @@ export const DICE_SIZES = [
 	20,
 	100,
 ] as const;
+
+export const DCC_DICE_SIZES = [
+	3,
+	5,
+	7,
+	14,
+	16,
+	24,
+	30,
+] as const;

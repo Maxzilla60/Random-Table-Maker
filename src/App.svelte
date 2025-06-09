@@ -5,11 +5,12 @@
 	import { draggingIndex$, handleDragEnd, handleDragOver, handleDragStart, handleDrop } from './state/drag-drop';
 	import { addEntry, entries$, removeEntry } from './state/entries';
 
-	const table$ = derived(entries$, mapEntriesToRandomTable);
-	const newEntryInput$ = writable<string>('');
-
+	const enableDCCDice$ = writable<boolean>(false);
 	const showOdds$ = writable<boolean>(false);
 	const showReorder$ = writable<boolean>(false);
+
+	const table$ = derived([entries$, enableDCCDice$], ([entries, enableDCCDice]) => mapEntriesToRandomTable(entries, enableDCCDice));
+	const newEntryInput$ = writable<string>('');
 </script>
 
 <main>
@@ -18,12 +19,16 @@
 	<details>
 		<summary>⚙️ Settings</summary>
 		<label>
-			Show Odds
-			<input type="checkbox" bind:checked={$showOdds$}/>
+			<input type="checkbox" bind:checked={$enableDCCDice$}/>
+			Use Dungeon Crawl Classics dice (d3, d5, d7, d14, d16, d24, d30)
 		</label><br/>
 		<label>
-			Reorder
+			<input type="checkbox" bind:checked={$showOdds$}/>
+			Show Odds
+		</label><br/>
+		<label>
 			<input type="checkbox" bind:checked={$showReorder$}/>
+			Reorder
 		</label>
 	</details>
 

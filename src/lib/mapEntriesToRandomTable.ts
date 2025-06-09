@@ -4,7 +4,7 @@ import { createSolvedSingleTable } from './createSolvedSingleTable';
 import { getDiceSizesForTable } from './getDiceSizesForTable';
 import type { RandomTable } from './types';
 
-export function mapEntriesToRandomTable(entries: string[]): RandomTable {
+export function mapEntriesToRandomTable(entries: string[], enableDCCDice: boolean): RandomTable {
 	if (entries.length === 0) {
 		return {
 			type: 'solved-single',
@@ -30,7 +30,7 @@ export function mapEntriesToRandomTable(entries: string[]): RandomTable {
 		};
 	}
 
-	const diceSizes = getDiceSizesForTable(entries);
+	const diceSizes = getDiceSizesForTable(entries, enableDCCDice);
 
 	switch (diceSizes.length) {
 		case 0:
