@@ -1,5 +1,5 @@
 - [x] LocalStorage
-- [ ] LocalStorage settings
+- [x] LocalStorage settings
 - [x] Editing toggle
 - [x] Show warning if 'forced'
 - [ ] Animations (@formkit/auto-animate)
@@ -9,6 +9,7 @@
 - [ ] Dice
   - [x] No coins
   - [x] DCC dice
+    - [ ] d3 = I, II, III
   - [ ] Fudge dice
 - [ ] Modes
   - [x] "Reroll" mode

@@ -51,7 +51,6 @@ function getInitialEntries(): string[] {
 			return JSON.parse(json) as string[];
 		} catch (error) {
 			localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_ENTRIES));
-			return DEFAULT_ENTRIES;
 		}
 	}
 	return DEFAULT_ENTRIES;
