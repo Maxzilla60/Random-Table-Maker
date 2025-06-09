@@ -10,6 +10,7 @@ describe('getDiceSizesForTable', () => {
 			enableDCCDice: false,
 			enableD2: true,
 			preferLargerDice: false,
+			mode: 'forced',
 		};
 
 		const entriesLengthsNotMappedToAD100 = [
@@ -60,6 +61,7 @@ describe('getDiceSizesForTable', () => {
 				enableDCCDice: false,
 				enableD2: false,
 				preferLargerDice: false,
+				mode: 'forced',
 			};
 
 			test.each(defaultTestData)('table of length $entriesLength should be mapped to a d$expectedSize', ({ entriesLength }) => {
@@ -75,6 +77,7 @@ describe('getDiceSizesForTable', () => {
 			enableDCCDice: true,
 			enableD2: true,
 			preferLargerDice: false,
+			mode: 'forced',
 		};
 
 		const dccTestData = [
@@ -106,6 +109,7 @@ describe('getDiceSizesForTable', () => {
 			enableDCCDice: false,
 			enableD2: true,
 			preferLargerDice: true,
+			mode: 'forced',
 		};
 
 		const largerDiceTestData = [

@@ -8,6 +8,7 @@ export type SingleTableEntry = {
 	value: string;
 	odds: number;
 	result: string;
+	isReroll: boolean;
 };
 
 export type Forced100RandomTable = {
@@ -16,29 +17,28 @@ export type Forced100RandomTable = {
 	table: SingleTableEntry[];
 }
 
-export type SolvedSingleRandomTable = {
-	type: 'solved-single';
+export type SingleRandomTable = {
+	type: 'solved-single' | 'reroll-single';
 	diceSize: [DiceSize];
 	table: SingleTableEntry[];
 }
 
-export type SolvedDoubleTableEntry = {
+export type DoubleTableEntry = Omit<SingleTableEntry, 'value'> & {
 	firstValue: string;
 	secondValue: string;
 	rowspan?: number;
-	odds: number;
-	result: string;
 };
-export type SolvedDoubleRandomTable = {
-	type: 'solved-double';
+export type DoubleRandomTable = {
+	type: 'solved-double' | 'reroll-double';
 	diceSize: [DiceSize, DiceSize];
-	table: SolvedDoubleTableEntry[];
+	table: DoubleTableEntry[];
 }
 
-export type RandomTable = Forced100RandomTable | SolvedSingleRandomTable | SolvedDoubleRandomTable;
+export type RandomTable = Forced100RandomTable | SingleRandomTable | DoubleRandomTable;
 
 export type Settings = {
 	enableDCCDice: boolean;
 	enableD2: boolean;
 	preferLargerDice: boolean;
+	mode: 'forced' | 'reroll';
 }

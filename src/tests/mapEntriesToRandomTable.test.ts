@@ -1,7 +1,7 @@
 import { concat, range } from 'lodash';
 import { describe, expect, test } from 'vitest';
 import { mapEntriesToRandomTable } from '../lib/mapEntriesToRandomTable';
-import type { Forced100RandomTable, Settings, SolvedDoubleRandomTable, SolvedSingleRandomTable } from '../lib/types';
+import type { DoubleRandomTable, Forced100RandomTable, Settings, SingleRandomTable } from '../lib/types';
 
 describe('mapEntriesToRandomTable', () => {
 	describe('with default dice sizes', () => {
@@ -9,30 +9,32 @@ describe('mapEntriesToRandomTable', () => {
 			enableDCCDice: false,
 			enableD2: true,
 			preferLargerDice: false,
+			mode: 'forced',
 		};
 
 		test('should map empty entries', () => {
 			const entries: string[] = [];
-			const expectedTable: SolvedSingleRandomTable = {
+			const expectedTable: SingleRandomTable = {
 				type: 'solved-single',
 				diceSize: [0],
 				table: [],
 			};
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result).toEqual(expectedTable);
 		});
 
 		test('should map single entry', () => {
 			const entries = ['Orcs Attack!'];
-			const expectedTable: SolvedSingleRandomTable = {
+			const expectedTable: SingleRandomTable = {
 				type: 'solved-single',
 				diceSize: [1],
 				table: [{
 					value: '1',
 					odds: 100,
 					result: entries[0],
+					isReroll: false,
 				}],
 			};
 
@@ -43,7 +45,7 @@ describe('mapEntriesToRandomTable', () => {
 
 		test('should map 2 entries to a solved coin flip', () => {
 			const entries = ['Yes', 'No'];
-			const expectedTable: SolvedSingleRandomTable = {
+			const expectedTable: SingleRandomTable = {
 				type: 'solved-single',
 				diceSize: [2],
 				table: [
@@ -51,11 +53,13 @@ describe('mapEntriesToRandomTable', () => {
 						value: 'heads',
 						odds: 50,
 						result: entries[0],
+						isReroll: false,
 					},
 					{
 						value: 'tails',
 						odds: 50,
 						result: entries[1],
+						isReroll: false,
 					},
 				],
 			};
@@ -70,9 +74,10 @@ describe('mapEntriesToRandomTable', () => {
 				enableDCCDice: false,
 				enableD2: false,
 				preferLargerDice: false,
+				mode: 'forced',
 			};
 			const entries = ['Yes', 'No'];
-			const expectedTable: SolvedSingleRandomTable = {
+			const expectedTable: SingleRandomTable = {
 				type: 'solved-single',
 				diceSize: [4],
 				table: [
@@ -80,11 +85,13 @@ describe('mapEntriesToRandomTable', () => {
 						value: '1-2',
 						odds: 50,
 						result: entries[0],
+						isReroll: false,
 					},
 					{
 						value: '3-4',
 						odds: 50,
 						result: entries[1],
+						isReroll: false,
 					},
 				],
 			};
@@ -97,7 +104,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 3 entries to a solved d6 table', () => {
 			const entries = ['Cyan', 'Magenta', 'Yellow'];
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([6]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -116,7 +123,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 4 entries to a solved d4 table', () => {
 			const entries = ['Summer', 'Autumn', 'Winter', 'Spring'];
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([4]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -131,7 +138,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 5 entries to a solved d10 table', () => {
 			const entries = ['Result 1', 'Result 2', 'Result 3', 'Result 4', 'Result 5'];
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([10]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -152,7 +159,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 6 entries to a solved d6 table', () => {
 			const entries = ['+', '+', ' ', ' ', '-', '-'];
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([6]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -198,7 +205,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 8 entries to a solved d8 table', () => {
 			const entries = range(8).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([8]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -213,7 +220,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 9 entries to a solved d6 & d6 table', () => {
 			const entries = range(9).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedDoubleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as DoubleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([6, 6]);
 			expect(result.type).toBe('solved-double');
@@ -342,7 +349,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 15 entries to a solved d6 & d10 table', () => {
 			const entries = range(15).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedDoubleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as DoubleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([6, 10]);
 			expect(result.type).toBe('solved-double');
@@ -407,7 +414,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 16 entries to a solved d2 & d8 table', () => {
 			const entries = range(16).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedDoubleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as DoubleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([2, 8]);
 			expect(result.type).toBe('solved-double');
@@ -461,7 +468,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 18 entries to a solved d6 & d6 table', () => {
 			const entries = range(18).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedDoubleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as DoubleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([6, 6]);
 			expect(result.type).toBe('solved-double');
@@ -535,7 +542,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 20 entries to a solved d20 table', () => {
 			const entries = range(20).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([20]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -550,7 +557,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 50 entries to a solved d100 table', () => {
 			const entries = range(50).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([100]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -616,7 +623,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 100 entries to a solved d100 table', () => {
 			const entries = range(100).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, defaultSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, defaultSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([100]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -634,12 +641,13 @@ describe('mapEntriesToRandomTable', () => {
 			enableDCCDice: true,
 			enableD2: true,
 			preferLargerDice: false,
+			mode: 'forced',
 		};
 
 		test('should map 3 entries to a solved d3 table', () => {
 			const entries = ['Rock', 'Paper', 'Scissors'];
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([3]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -654,7 +662,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 5 entries to a solved d5 table', () => {
 			const entries = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter'];
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([5]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -669,7 +677,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 7 entries to a solved d7 table', () => {
 			const entries = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([7]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -684,7 +692,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 14 entries to a solved d14 table', () => {
 			const entries = range(14).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([14]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -699,7 +707,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 16 entries to a solved d16 table', () => {
 			const entries = range(16).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([16]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -714,7 +722,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 24 entries to a solved d24 table', () => {
 			const entries = range(24).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([24]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -729,7 +737,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 30 entries to a solved d30 table', () => {
 			const entries = range(30).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([30]);
 			expect(result.type).toStrictEqual('solved-single');
@@ -744,7 +752,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 15 entries to a solved d30 table', () => {
 			const entries = range(15).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedSingleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as SingleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([30]);
 			expect(result.type).toBe('solved-single');
@@ -775,7 +783,7 @@ describe('mapEntriesToRandomTable', () => {
 		test('should map 21 entries to a solved d3 & d7 table', () => {
 			const entries = range(21).map(i => `Result ${i + 1}`);
 
-			const result = mapEntriesToRandomTable(entries, dccSettings) as SolvedDoubleRandomTable;
+			const result = mapEntriesToRandomTable(entries, dccSettings) as DoubleRandomTable;
 
 			expect(result.diceSize).toStrictEqual([3, 7]);
 			expect(result.type).toBe('solved-double');

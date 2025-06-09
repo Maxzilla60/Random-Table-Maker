@@ -1,4 +1,5 @@
 import { createForcedTable } from './createForcedTable';
+import { createRerollTable } from './createRerollTable';
 import { createSolvedDoubleTable } from './createSolvedDoubleTable';
 import { createSolvedSingleTable } from './createSolvedSingleTable';
 import { getDiceSizesForTable } from './getDiceSizesForTable';
@@ -16,7 +17,7 @@ export function mapEntriesToRandomTable(entries: string[], settings: Settings): 
 		return {
 			type: 'solved-single',
 			diceSize: [1],
-			table: [{ value: '1', result: entries[0], odds: 100 }],
+			table: [{ value: '1', result: entries[0], odds: 100, isReroll: false }],
 		};
 	}
 	if (settings.enableD2 && entries.length === 2) {
@@ -24,8 +25,8 @@ export function mapEntriesToRandomTable(entries: string[], settings: Settings): 
 			type: 'solved-single',
 			diceSize: [2],
 			table: [
-				{ value: 'heads', result: entries[0], odds: 50 },
-				{ value: 'tails', result: entries[1], odds: 50 },
+				{ value: 'heads', result: entries[0], odds: 50, isReroll: false },
+				{ value: 'tails', result: entries[1], odds: 50, isReroll: false },
 			],
 		};
 	}
@@ -34,7 +35,10 @@ export function mapEntriesToRandomTable(entries: string[], settings: Settings): 
 
 	switch (diceSizes.length) {
 		case 0:
-			return createForcedTable(entries);
+			if (settings.mode === 'forced') {
+				return createForcedTable(entries);
+			}
+			return createRerollTable(entries, settings);
 		case 1:
 			return createSolvedSingleTable(entries, diceSizes[0]);
 		case 2:

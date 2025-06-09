@@ -24,6 +24,7 @@ export function createForcedTable(entries: string[]): Forced100RandomTable {
 		.map(([valueAndResult, odds]) => ({
 			...valueAndResult,
 			odds,
+			isReroll: false,
 		}))
 		.value() as SingleTableEntry[];
 

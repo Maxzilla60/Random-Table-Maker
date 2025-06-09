@@ -1,15 +1,15 @@
 import { chain } from 'lodash';
 import { mapRangesToValues } from './mapRangesToValues';
-import type { DiceSize, SolvedDoubleRandomTable, SolvedDoubleTableEntry } from './types';
+import type { DiceSize, DoubleRandomTable, DoubleTableEntry } from './types';
 
-export function createSolvedDoubleTable(entries: string[], diceSizes: [DiceSize, DiceSize]): SolvedDoubleRandomTable {
+export function createSolvedDoubleTable(entries: string[], diceSizes: [DiceSize, DiceSize]): DoubleRandomTable {
 	const [firstDie, secondDie] = diceSizes;
 	const gdc = greatestCommonDivisor(entries.length, firstDie);
 
 	const firstValues = firstDie === 2 ? ['heads', 'tails'] : createOneOfDoubleValues(gdc, firstDie / gdc);
 	const secondValues = createOneOfDoubleValues(entries.length / gdc, secondDie / (entries.length / gdc));
 
-	const table: SolvedDoubleTableEntry[] = firstValues
+	const table: DoubleTableEntry[] = firstValues
 		.map(firstValue => secondValues.map((secondValue, index) => ({
 			firstValue,
 			secondValue,
@@ -20,6 +20,7 @@ export function createSolvedDoubleTable(entries: string[], diceSizes: [DiceSize,
 			...entry,
 			odds: 100 / entries.length,
 			result: entries[index],
+			isReroll: false,
 		}));
 
 	return {

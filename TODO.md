@@ -1,9 +1,9 @@
 - [x] LocalStorage
+- [ ] LocalStorage settings
+- [ ] Editing toggle
 - [x] Show warning if 'forced'
-- [ ] Styling
 - [ ] Animations (@formkit/auto-animate)
 - [ ] Export
-- [ ] Editing
 - [x] Drag & drop reordering
 - [ ] Drag & drop library? (https://www.reddit.com/r/sveltejs/comments/1181gte/drag_drop_in_svelte_hunting_for_libs/)
 - [ ] Dice
@@ -11,7 +11,7 @@
   - [x] DCC dice
   - [ ] Fudge dice
 - [ ] Modes
-  - [ ] "Reroll" mode
+  - [x] "Reroll" mode
   - [ ] "Bell curve" mode
 - [ ] Documentation
 - [ ] Svelte integration tests?
@@ -19,3 +19,4 @@
 - [ ] Dice icons
 - [ ] Odds progress bar
 - [ ] Sort alphabetically button
+- [ ] Styling
