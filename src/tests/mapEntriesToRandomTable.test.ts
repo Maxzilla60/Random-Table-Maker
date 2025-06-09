@@ -4,25 +4,13 @@ import { mapEntriesToRandomTable } from '../lib/mapEntriesToRandomTable';
 import type { Forced100RandomTable, Settings, SolvedDoubleRandomTable, SolvedSingleRandomTable } from '../lib/types';
 
 describe('mapEntriesToRandomTable', () => {
-	const defaultSettings: Settings = {
-		enableDCCDice: false,
-		enableD2: true,
-		preferLargerDice: false,
-	};
-
-	const dccSettings: Settings = {
-		enableDCCDice: true,
-		enableD2: true,
-		preferLargerDice: false,
-	};
-
-	const noD2Settings: Settings = {
-		enableDCCDice: false,
-		enableD2: false,
-		preferLargerDice: false,
-	};
-
 	describe('with default dice sizes', () => {
+		const defaultSettings: Settings = {
+			enableDCCDice: false,
+			enableD2: true,
+			preferLargerDice: false,
+		};
+
 		test('should map empty entries', () => {
 			const entries: string[] = [];
 			const expectedTable: SolvedSingleRandomTable = {
@@ -78,6 +66,11 @@ describe('mapEntriesToRandomTable', () => {
 		});
 
 		test('should map 2 entries to a d4 if d2\'s are disabled', () => {
+			const noD2Settings: Settings = {
+				enableDCCDice: false,
+				enableD2: false,
+				preferLargerDice: false,
+			};
 			const entries = ['Yes', 'No'];
 			const expectedTable: SolvedSingleRandomTable = {
 				type: 'solved-single',
@@ -637,6 +630,12 @@ describe('mapEntriesToRandomTable', () => {
 	});
 
 	describe('with DCC dice sizes', () => {
+		const dccSettings: Settings = {
+			enableDCCDice: true,
+			enableD2: true,
+			preferLargerDice: false,
+		};
+
 		test('should map 3 entries to a solved d3 table', () => {
 			const entries = ['Rock', 'Paper', 'Scissors'];
 
