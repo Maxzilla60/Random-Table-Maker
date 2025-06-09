@@ -36,3 +36,8 @@ export type SolvedDoubleRandomTable = {
 }
 
 export type RandomTable = Forced100RandomTable | SolvedSingleRandomTable | SolvedDoubleRandomTable;
+
+export type Settings = {
+	enableDCCDice: boolean;
+	enableD2: boolean;
+}

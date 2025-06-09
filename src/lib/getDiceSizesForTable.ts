@@ -1,8 +1,8 @@
 import { chain, concat } from 'lodash';
 import { DCC_DICE_SIZES, DICE_SIZES } from './constants';
-import type { DiceSize, DiceSizes } from './types';
+import type { DiceSize, DiceSizes, Settings } from './types';
 
-export function getDiceSizesForTable(entries: string[], enableDCCDice: boolean): DiceSizes {
+export function getDiceSizesForTable(entries: string[], settings: Settings): DiceSizes {
 	if (entries.length === 0) {
 		return [0];
 	}
@@ -10,7 +10,7 @@ export function getDiceSizesForTable(entries: string[], enableDCCDice: boolean):
 		return [1];
 	}
 
-	const diceSizes = getDiceSizes(enableDCCDice);
+	const diceSizes = getDiceSizes(settings);
 
 	const exactFit = diceSizes
 		.find(size => size === entries.length);
@@ -35,11 +35,13 @@ export function getDiceSizesForTable(entries: string[], enableDCCDice: boolean):
 	return doubleFit ?? [];
 }
 
-function getDiceSizes(enableDCCDice: boolean): readonly DiceSize[] {
+function getDiceSizes({ enableDCCDice, enableD2 }: Settings): readonly DiceSize[] {
+	const availableDice = enableD2 ? DICE_SIZES : DICE_SIZES.filter(size => size !== 2);
+
 	if (enableDCCDice) {
-		return concat(DICE_SIZES, DCC_DICE_SIZES)
+		return concat(availableDice, DCC_DICE_SIZES)
 			.toSorted((a, b) => a - b);
 	}
 
-	return DICE_SIZES;
+	return availableDice;
 }

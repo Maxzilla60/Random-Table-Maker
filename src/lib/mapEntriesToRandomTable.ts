@@ -2,9 +2,9 @@ import { createForcedTable } from './createForcedTable';
 import { createSolvedDoubleTable } from './createSolvedDoubleTable';
 import { createSolvedSingleTable } from './createSolvedSingleTable';
 import { getDiceSizesForTable } from './getDiceSizesForTable';
-import type { RandomTable } from './types';
+import type { RandomTable, Settings } from './types';
 
-export function mapEntriesToRandomTable(entries: string[], enableDCCDice: boolean): RandomTable {
+export function mapEntriesToRandomTable(entries: string[], settings: Settings): RandomTable {
 	if (entries.length === 0) {
 		return {
 			type: 'solved-single',
@@ -19,7 +19,7 @@ export function mapEntriesToRandomTable(entries: string[], enableDCCDice: boolea
 			table: [{ value: '1', result: entries[0], odds: 100 }],
 		};
 	}
-	if (entries.length === 2) {
+	if (settings.enableD2 && entries.length === 2) {
 		return {
 			type: 'solved-single',
 			diceSize: [2],
@@ -30,7 +30,7 @@ export function mapEntriesToRandomTable(entries: string[], enableDCCDice: boolea
 		};
 	}
 
-	const diceSizes = getDiceSizesForTable(entries, enableDCCDice);
+	const diceSizes = getDiceSizesForTable(entries, settings);
 
 	switch (diceSizes.length) {
 		case 0:

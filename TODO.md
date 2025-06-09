@@ -1,12 +1,13 @@
 - [x] LocalStorage
 - [x] Show warning if 'forced'
 - [ ] Styling
+- [ ] Animations (@formkit/auto-animate)
 - [ ] Export
 - [ ] Editing
 - [x] Drag & drop reordering
-- [ ] Drag & drop libary? (https://www.reddit.com/r/sveltejs/comments/1181gte/drag_drop_in_svelte_hunting_for_libs/)
+- [ ] Drag & drop library? (https://www.reddit.com/r/sveltejs/comments/1181gte/drag_drop_in_svelte_hunting_for_libs/)
 - [ ] Dice
-  - [ ] No coins
+  - [x] No coins
   - [x] DCC dice
   - [ ] Fudge dice
 - [ ] Modes

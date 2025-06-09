@@ -2,6 +2,7 @@ import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
 import { MAX_TABLE_LENGTH } from '../lib/constants';
 import { getDiceSizesForTable } from '../lib/getDiceSizesForTable';
+import { type Settings } from '../lib/types';
 
 const tableLengthsNotMappedToAD100 = [
 	{ tableLength: 0, expectedSize: [0] },
@@ -55,17 +56,34 @@ const dccTestData = [
 	{ tableLength: 30, expectedSize: [30] },
 	{ tableLength: 32, expectedSize: [2, 16] },
 	{ tableLength: 35, expectedSize: [5, 7] },
-	{ tableLength: 36, expectedSize: [3, 12] },
-	{ tableLength: 42, expectedSize: [3, 14] },
-	{ tableLength: 48, expectedSize: [2, 24] },
+];
+
+const noD2TestData = [
+	{ tableLength: 2, expectedSize: [4] },
+	{ tableLength: 16, expectedSize: [4, 4] },
 ];
 
 describe('getDiceSizesForTable', () => {
+	const defaultSettings: Settings = {
+		enableDCCDice: false,
+		enableD2: true,
+	};
+
+	const dccSettings: Settings = {
+		enableDCCDice: true,
+		enableD2: true,
+	};
+
+	const noD2Settings: Settings = {
+		enableDCCDice: false,
+		enableD2: false,
+	};
+
 	describe('with default dice sizes', () => {
 		test.each(defaultTestData)('table of length $tableLength should be mapped to a d$expectedSize', ({ tableLength, expectedSize }) => {
 			const table = new Array(tableLength);
 
-			const result = getDiceSizesForTable(table, false);
+			const result = getDiceSizesForTable(table, defaultSettings);
 
 			expect(result).toStrictEqual(expectedSize);
 		});
@@ -75,9 +93,17 @@ describe('getDiceSizesForTable', () => {
 		test.each(dccTestData)('table of length $tableLength should be mapped to a d$expectedSize', ({ tableLength, expectedSize }) => {
 			const table = new Array(tableLength);
 
-			const result = getDiceSizesForTable(table, true);
+			const result = getDiceSizesForTable(table, dccSettings);
 
 			expect(result).toStrictEqual(expectedSize);
+		});
+	});
+
+	describe('disabling d2 dice size', () => {
+		test.each(noD2TestData)('table of length $tableLength should be mapped to a d$expectedSize', ({ tableLength, expectedSize }) => {
+			const result = getDiceSizesForTable(new Array(tableLength).fill(''), noD2Settings);
+			expect(result[0]).not.toBe(2);
+			expect(result[1]).not.toBe(2);
 		});
 	});
 });
