@@ -67,16 +67,19 @@ describe('getDiceSizesForTable', () => {
 	const defaultSettings: Settings = {
 		enableDCCDice: false,
 		enableD2: true,
+		preferLargerDice: false,
 	};
 
 	const dccSettings: Settings = {
 		enableDCCDice: true,
 		enableD2: true,
+		preferLargerDice: false,
 	};
 
 	const noD2Settings: Settings = {
 		enableDCCDice: false,
 		enableD2: false,
+		preferLargerDice: false,
 	};
 
 	describe('with default dice sizes', () => {
@@ -104,6 +107,26 @@ describe('getDiceSizesForTable', () => {
 			const result = getDiceSizesForTable(new Array(tableLength).fill(''), noD2Settings);
 			expect(result[0]).not.toBe(2);
 			expect(result[1]).not.toBe(2);
+		});
+	});
+
+	describe('with preferLargerDice option', () => {
+		const largerDiceTestData = [
+			{ tableLength: 3, expectedSize: [12] },
+			{ tableLength: 5, expectedSize: [100] },
+			{ tableLength: 4, expectedSize: [4] },
+			{ tableLength: 9, expectedSize: [12, 12] },
+			{ tableLength: 15, expectedSize: [100, 12] },
+			{ tableLength: 16, expectedSize: [100, 100] },
+		];
+
+		test.each(largerDiceTestData)('table of length $tableLength should prefer larger dice and use d$expectedSize', ({ tableLength, expectedSize }) => {
+			const table = new Array(tableLength).fill('');
+			const settingsWithLargerDice = { ...defaultSettings, preferLargerDice: true };
+
+			const result = getDiceSizesForTable(table, settingsWithLargerDice);
+
+			expect(result).toStrictEqual(expectedSize);
 		});
 	});
 });

@@ -7,12 +7,13 @@
 
 	const enableDCCDice$ = writable<boolean>(false);
 	const enableD2$ = writable<boolean>(true);
+	const preferLargerDice$ = writable<boolean>(false);
 
 	const showOdds$ = writable<boolean>(false);
 	const showReorder$ = writable<boolean>(false);
 
-	const table$ = derived([entries$, enableDCCDice$, enableD2$], ([entries, enableDCCDice, enableD2]) =>
-		mapEntriesToRandomTable(entries, { enableDCCDice, enableD2 }),
+	const table$ = derived([entries$, enableDCCDice$, enableD2$, preferLargerDice$], ([entries, enableDCCDice, enableD2, preferLargerDice]) =>
+		mapEntriesToRandomTable(entries, { enableDCCDice, enableD2, preferLargerDice }),
 	);
 	const newEntryInput$ = writable<string>('');
 </script>
@@ -29,6 +30,10 @@
 		<label>
 			<input type="checkbox" bind:checked={$enableDCCDice$}/>
 			Use Dungeon Crawl Classics dice (d3, d5, d7, d14, d16, d24, d30)
+		</label><br/>
+		<label>
+			<input type="checkbox" bind:checked={$preferLargerDice$}/>
+			Prefer larger dice
 		</label><br/>
 		<label>
 			<input type="checkbox" bind:checked={$showOdds$}/>

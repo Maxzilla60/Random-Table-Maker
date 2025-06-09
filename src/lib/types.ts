@@ -40,4 +40,5 @@ export type RandomTable = Forced100RandomTable | SolvedSingleRandomTable | Solve
 export type Settings = {
 	enableDCCDice: boolean;
 	enableD2: boolean;
+	preferLargerDice: boolean;
 }

@@ -35,7 +35,7 @@ export function getDiceSizesForTable(entries: string[], settings: Settings): Dic
 	return doubleFit ?? [];
 }
 
-function getDiceSizes({ enableDCCDice, enableD2 }: Settings): readonly DiceSize[] {
+function getDiceSizes({ enableDCCDice, enableD2, preferLargerDice }: Settings): readonly DiceSize[] {
 	const availableDice = enableD2 ? DICE_SIZES : DICE_SIZES.filter(size => size !== 2);
 
 	if (enableDCCDice) {
@@ -43,5 +43,5 @@ function getDiceSizes({ enableDCCDice, enableD2 }: Settings): readonly DiceSize[
 			.toSorted((a, b) => a - b);
 	}
 
-	return availableDice;
+	return preferLargerDice ? availableDice.toReversed() : availableDice;
 }

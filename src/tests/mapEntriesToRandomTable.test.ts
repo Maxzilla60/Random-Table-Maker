@@ -7,16 +7,19 @@ describe('mapEntriesToRandomTable', () => {
 	const defaultSettings: Settings = {
 		enableDCCDice: false,
 		enableD2: true,
+		preferLargerDice: false,
 	};
 
 	const dccSettings: Settings = {
 		enableDCCDice: true,
 		enableD2: true,
+		preferLargerDice: false,
 	};
 
 	const noD2Settings: Settings = {
 		enableDCCDice: false,
 		enableD2: false,
+		preferLargerDice: false,
 	};
 
 	describe('with default dice sizes', () => {
