@@ -103,7 +103,7 @@
         background-color: cadetblue;
     }
 
-    tr[draggable=true] {
+    td[draggable="true"] {
         cursor: move;
     }
 </style>
