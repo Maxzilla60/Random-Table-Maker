@@ -17,7 +17,7 @@
 
 		<thead>
 		<tr>
-			{#if type === 'solved-double' || type === 'reroll-double' || type === 'forced'}
+			{#if type === 'solved-double' || type === 'reroll-double'}
 				<th colspan="2">
 					{#if firstDie === 2}
 						coin
@@ -29,11 +29,7 @@
 					{:else}
 						& d{ secondDie }
 					{/if}
-					{#if type === 'forced'}
-						<span title="Warning: This d100 table is 'forced' and does not have equal odds! Entries near the top of the table will have slightly higher odds (toggle on the odds in the settings).">
-							(⚠️)
-						</span>
-					{:else if type === 'reroll-double'}
+					{#if type === 'reroll-double'}
 						<span title={`Warning: This table has had additional 'reroll' entries added to ensure equal odds.`}>
 							(⚠️)
 						</span>
@@ -51,6 +47,13 @@
 							(⚠️)
 						</span>
 					{/if}
+				</th>
+			{:else if type === 'forced'}
+				<th>
+					d{ firstDie }
+					<span title="Warning: This d100 table is 'forced' and does not have equal odds! Entries near the top of the table will have slightly higher odds (toggle on the odds in the settings).">
+						(⚠️)
+					</span>
 				</th>
 			{:else if type === 'unsolved-bell'}
 				<th>not solvable</th>
@@ -100,11 +103,17 @@
 			{/each}
 		{:else}
 			{#each table as entry}
+				{@const allOdds = table.map(e => e.odds)}
+				{@const isForcedResult = type === 'forced' && allOdds.some(otherOdds => odds > otherOdds)}
+
 				{@const { value, odds, result, isReroll } = entry}
 				<tr>
 					<td>{ value }</td>
 					{#if showOdds}
-						<td>{odds.toFixed(2)}%</td>
+						<td>
+							{odds.toFixed(2)}%
+							{#if isForcedResult} ⚠️{/if}
+						</td>
 					{/if}
 					<td
 						style:font-style={isReroll ? 'italic' : 'initial'}
