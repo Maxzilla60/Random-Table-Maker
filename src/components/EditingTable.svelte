@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { get, writable } from 'svelte/store';
 	import { MAX_TABLE_LENGTH } from '../lib/constants.js';
-	import { addEntry, entries$, removeEntry, reorderEntries } from '../state/entries.js';
+	import { addEntry, clearEntries, entries$, removeEntry, reorderEntries } from '../state/entries.js';
 
 	const newEntryInput$ = writable<string>('');
 
@@ -42,7 +42,9 @@
 	<tr>
 		<th>Reorder</th>
 		<th>Result ({ $entries$.length })</th>
-		<th>Delete</th>
+		<th>
+			<button title="Clear table" onclick={clearEntries}>🗑️</button>
+		</th>
 	</tr>
 	</thead>
 
@@ -62,7 +64,7 @@
 			</td>
 			<td>{entry}</td>
 			<td>
-				<button onclick={() => removeEntry(index)}>🗑️</button>
+				<button onclick={() => removeEntry(index)}>➖</button>
 			</td>
 		</tr>
 	{/each}

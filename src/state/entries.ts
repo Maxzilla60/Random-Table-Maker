@@ -26,6 +26,10 @@ export function removeEntry(index: number): void {
 	entriesWritable.update(entries => filter(entries, (_, i) => i !== index));
 }
 
+export function clearEntries(): void {
+	entriesWritable.set([]);
+}
+
 export function addEntry(newEntry: string): void {
 	entriesWritable.update(entries => {
 		if (entries.length >= MAX_TABLE_LENGTH) {
