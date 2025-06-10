@@ -1,11 +1,13 @@
 <script lang="ts">
+	import autoAnimate from '@formkit/auto-animate';
+	import { map } from 'lodash';
 	import { derived } from 'svelte/store';
 	import { mapEntriesToRandomTable } from '../lib/mapEntriesToRandomTable';
 	import { entries$ } from '../state/entries';
 	import { settings$, showOdds$ } from '../state/settings';
 
 	const table$ = derived([entries$, settings$], ([entries, settings]) =>
-		mapEntriesToRandomTable(entries, settings),
+		mapEntriesToRandomTable(map(entries, 'value'), settings),
 	);
 </script>
 
@@ -15,7 +17,7 @@
 		{@const [firstDie, secondDie] = diceSize}
 		{@const showOdds = $showOdds$}
 
-		<thead>
+		<thead use:autoAnimate>
 		<tr>
 			{#if type === 'solved-double' || type === 'reroll-double'}
 				<th colspan="2">
@@ -81,7 +83,7 @@
 		</tr>
 		</thead>
 
-		<tbody>
+		<tbody use:autoAnimate>
 		{#if type === 'solved-double' || type === 'reroll-double'}
 			{#each table as entry}
 				{@const { firstValue, secondValue, rowspan, odds, result, isReroll } = entry}

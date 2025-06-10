@@ -2,7 +2,7 @@
 - [x] LocalStorage settings
 - [x] Editing toggle
 - [x] Show warning if 'forced'
-- [ ] Animations (@formkit/auto-animate)
+- [x] Animations (@formkit/auto-animate)
 - [ ] Export
 - [x] Drag & drop reordering
 - [ ] Drag & drop library? (https://www.reddit.com/r/sveltejs/comments/1181gte/drag_drop_in_svelte_hunting_for_libs/)

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import autoAnimate from '@formkit/auto-animate';
 	import { get, writable } from 'svelte/store';
 	import { MAX_TABLE_LENGTH } from '../lib/constants.js';
 	import { addEntry, clearEntries, entries$, removeEntry, reorderEntries } from '../state/entries.js';
@@ -48,8 +49,8 @@
 	</tr>
 	</thead>
 
-	<tbody>
-	{#each $entries$ as entry, index}
+	<tbody use:autoAnimate>
+	{#each $entries$ as entry, index (entry.id)}
 		<tr
 			class={$draggingIndex$ === index ? 'dragging' : ''}
 			ondragover={handleDragOver}
@@ -62,7 +63,7 @@
 			>
 				↕️
 			</td>
-			<td>{entry}</td>
+			<td>{entry.value}</td>
 			<td>
 				<button onclick={() => removeEntry(index)}>➖</button>
 			</td>
