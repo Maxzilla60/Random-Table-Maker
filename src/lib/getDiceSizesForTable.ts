@@ -1,5 +1,5 @@
 import { chain, concat } from 'lodash';
-import { DCC_DICE_SIZES, DICE_SIZES } from './constants';
+import { DCC_DICE_SIZES, DEFAULT_DICE_SIZES } from './constants';
 import type { DiceSize, DiceSizes, Settings } from './types';
 
 export function getDiceSizesForTable(entriesLength: number, settings: Settings): DiceSizes {
@@ -36,7 +36,7 @@ export function getDiceSizesForTable(entriesLength: number, settings: Settings):
 }
 
 function getDiceSizes({ enableDCCDice, enableD2, preferLargerDice }: Settings): readonly DiceSize[] {
-	const availableDice = enableD2 ? DICE_SIZES : DICE_SIZES.filter(size => size !== 2);
+	const availableDice = enableD2 ? DEFAULT_DICE_SIZES : DEFAULT_DICE_SIZES.filter(size => size !== 2);
 
 	if (enableDCCDice) {
 		return concat(availableDice, DCC_DICE_SIZES)
