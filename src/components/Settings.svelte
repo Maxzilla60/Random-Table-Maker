@@ -35,5 +35,13 @@
 			<input type="radio" bind:group={$mode$} value="reroll"/>
 			<b>Reroll:</b> Will add "reroll" entries to the table to make it fit equally distributed dice size(s).
 		</label>
+
+		<p style:margin-top="1rem">There's also the following mode:</p>
+
+		<label>
+			<input type="radio" bind:group={$mode$} value="bell"/>
+			<b>Bell Curve:</b> Uses a bell curve distribution to spread the entries, which means that entries near the middle of the table will have higher odds than those at the edges.
+			Will work similarly to the "Reroll" mode if it cannot find a fitting dice combination. Will not work for tables with 40 or more entries.
+		</label>
 	</fieldset>
 </details>

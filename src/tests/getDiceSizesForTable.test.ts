@@ -131,4 +131,28 @@ describe('getDiceSizesForTable', () => {
 			expect(result).toStrictEqual(expectedSize);
 		});
 	});
+
+	describe('with bell curve mode', () => {
+		const bellCurveSettings: Settings = {
+			enableDCCDice: false,
+			enableD2: true,
+			preferLargerDice: false,
+			mode: 'bell',
+			showOdds: false,
+		};
+
+		const bellCurveTestData = [
+			{ entriesLength: 5, expectedSize: [8, 8] },
+			{ entriesLength: 7, expectedSize: [4, 4] },
+			{ entriesLength: 10, expectedSize: [] },
+			{ entriesLength: 12, expectedSize: [] },
+			{ entriesLength: 15, expectedSize: [8, 8] },
+			{ entriesLength: 20, expectedSize: [] },
+		];
+
+		test.each(bellCurveTestData)('table of length $entriesLength in bell curve mode should use d$expectedSize', ({ entriesLength, expectedSize }) => {
+			const result = getDiceSizesForTable(entriesLength, bellCurveSettings);
+			expect(result).toStrictEqual(expectedSize);
+		});
+	});
 });

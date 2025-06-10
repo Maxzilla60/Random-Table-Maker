@@ -1,4 +1,6 @@
+import { createBellCurveTable } from './createBellCurveTable';
 import { createForcedTable } from './createForcedTable';
+import { createRerollBellTable } from './createRerollBellTable';
 import { createRerollTable } from './createRerollTable';
 import { createSolvedDoubleTable } from './createSolvedDoubleTable';
 import { createSolvedSingleTable } from './createSolvedSingleTable';
@@ -35,13 +37,22 @@ export function mapEntriesToRandomTable(entries: string[], settings: Settings): 
 
 	switch (diceSizes.length) {
 		case 0:
-			if (settings.mode === 'forced') {
-				return createForcedTable(entries);
+			switch (settings.mode) {
+				case 'forced':
+					return createForcedTable(entries);
+				case 'reroll':
+					return createRerollTable(entries, settings);
+				case 'bell':
+					return createRerollBellTable(entries, settings);
+				default:
+					throw new Error(`Cannot create random table for ${entries.length} entries with dice sizes ${diceSizes}`);
 			}
-			return createRerollTable(entries, settings);
 		case 1:
 			return createSolvedSingleTable(entries, diceSizes[0]);
 		case 2:
+			if (settings.mode === 'bell') {
+				return createBellCurveTable(entries, diceSizes);
+			}
 			return createSolvedDoubleTable(entries, diceSizes);
 		default:
 			throw new Error(`Cannot create random table for ${entries.length} entries with dice sizes ${diceSizes}`);

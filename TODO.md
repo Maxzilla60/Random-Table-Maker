@@ -11,9 +11,9 @@
   - [x] DCC dice
     - [ ] d3 = I, II, III
   - [ ] Fudge dice
-- [ ] Modes
+- [x] Modes
   - [x] "Reroll" mode
-  - [ ] "Bell curve" mode
+  - [x] "Bell curve" mode
 - [ ] Documentation
 - [ ] Svelte integration tests?
 - [ ] Copy-paste parsing

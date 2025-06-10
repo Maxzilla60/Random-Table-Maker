@@ -22,6 +22,21 @@ export type SingleRandomTable = {
 	diceSize: [DiceSize];
 	table: SingleTableEntry[];
 }
+export type BellSolvedRandomTable = {
+	type: 'solved-bell' | 'reroll-bell' | 'unsolved-bell';
+	diceSize: [DiceSize, DiceSize];
+	table: SingleTableEntry[];
+}
+export type BellUnsolvedRandomTable = {
+	type: 'unsolved-bell';
+	diceSize: [];
+	table: {
+		value: 'x';
+		odds: 0;
+		result: string;
+		isReroll: false;
+	}[];
+}
 
 export type DoubleTableEntry = Omit<SingleTableEntry, 'value'> & {
 	firstValue: string;
@@ -34,12 +49,16 @@ export type DoubleRandomTable = {
 	table: DoubleTableEntry[];
 }
 
-export type RandomTable = Forced100RandomTable | SingleRandomTable | DoubleRandomTable;
+export type RandomTable = Forced100RandomTable
+	| SingleRandomTable
+	| DoubleRandomTable
+	| BellSolvedRandomTable
+	| BellUnsolvedRandomTable;
 
 export type Settings = {
 	enableD2: boolean;
 	enableDCCDice: boolean;
 	preferLargerDice: boolean;
-	mode: 'forced' | 'reroll';
+	mode: 'forced' | 'reroll' | 'bell';
 	showOdds: boolean;
 }

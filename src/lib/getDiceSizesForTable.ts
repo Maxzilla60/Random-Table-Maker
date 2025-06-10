@@ -9,6 +9,9 @@ export function getDiceSizesForTable(entriesLength: number, settings: Settings):
 	if (entriesLength === 1) {
 		return [1];
 	}
+	if (settings.mode === 'bell') {
+		return getBellCurveDiceSizes(entriesLength, settings);
+	}
 
 	const diceSizes = getDiceSizes(settings);
 
@@ -33,6 +36,33 @@ export function getDiceSizesForTable(entriesLength: number, settings: Settings):
 		.value() as [DiceSize, DiceSize] | undefined;
 
 	return doubleFit ?? [];
+}
+
+function getBellCurveDiceSizes(entriesLength: number, settings: Settings): DiceSizes {
+	const diceSizes = getDiceSizes({ ...settings, enableD2: false });
+
+	const all = chain(diceSizes)
+		.map(firstSize => diceSizes.map(secondSize => [firstSize, secondSize]))
+		.flatMap()
+		.value();
+
+	const exactDoubleFit = chain(diceSizes)
+		.map(size => [size, size])
+		.unionBy(all, pair => pair.join(','))
+		.find(([firstSize, secondSize]) => (firstSize + secondSize - 1) % entriesLength === 0)
+		.value() as [DiceSize, DiceSize] | undefined;
+
+	if (exactDoubleFit) {
+		return exactDoubleFit;
+	}
+
+	const comboFit = chain(diceSizes)
+		.map(firstSize => diceSizes.map(secondSize => [firstSize, secondSize]))
+		.flatMap()
+		.find(([firstSize, secondSize]) => (firstSize + secondSize - 1) % entriesLength === 0)
+		.value() as [DiceSize, DiceSize] | undefined;
+
+	return comboFit ?? [];
 }
 
 function getDiceSizes({ enableDCCDice, enableD2, preferLargerDice }: Settings): readonly DiceSize[] {

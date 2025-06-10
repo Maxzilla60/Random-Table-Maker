@@ -4,7 +4,7 @@ import type { Settings } from './types';
 
 export function getRerollEntriesLength(entriesLength: number, settings: Settings, rerollLength = 0): number {
 	if (entriesLength + rerollLength > MAX_TABLE_LENGTH) {
-		throw new Error('getDiceSizesForTable cannot handle it!');
+		return -1;
 	}
 
 	const diceSizes = getDiceSizesForTable(entriesLength + rerollLength, settings);

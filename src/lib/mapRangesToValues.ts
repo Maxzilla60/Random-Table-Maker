@@ -1,9 +1,9 @@
 type StartAndEnd = { start: number, end: number };
 
-export function mapRangesToValues(ranges: number[]): string[] {
+export function mapRangesToValues(ranges: number[], firstValue = 0): string[] {
 	return ranges
 		.reduce((values, valueRange): StartAndEnd[] => {
-			const start = values.at(-1)?.end ?? 0;
+			const start = values.at(-1)?.end ?? firstValue;
 			const end = start + valueRange;
 
 			return [

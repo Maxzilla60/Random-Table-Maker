@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import * as bellCurveTableModule from '../lib/createBellCurveTable';
 import * as forcedTableModule from '../lib/createForcedTable';
+import * as rerollBellTableModule from '../lib/createRerollBellTable';
 import * as rerollTableModule from '../lib/createRerollTable';
 import * as solvedDoubleTableModule from '../lib/createSolvedDoubleTable';
 import * as solvedSingleTableModule from '../lib/createSolvedSingleTable';
@@ -23,6 +25,14 @@ describe('mapEntriesToRandomTable', () => {
 		showOdds: false,
 	};
 
+	const bellSettings: Settings = {
+		enableDCCDice: false,
+		enableD2: true,
+		preferLargerDice: false,
+		mode: 'bell',
+		showOdds: false,
+	};
+
 	beforeEach(() => {
 		vi.spyOn(forcedTableModule, 'createForcedTable').mockReturnValue({
 			type: 'forced',
@@ -33,6 +43,18 @@ describe('mapEntriesToRandomTable', () => {
 		vi.spyOn(rerollTableModule, 'createRerollTable').mockReturnValue({
 			type: 'reroll-single',
 			diceSize: [10],
+			table: [],
+		});
+
+		vi.spyOn(rerollBellTableModule, 'createRerollBellTable').mockReturnValue({
+			type: 'reroll-bell',
+			diceSize: [6, 6],
+			table: [],
+		});
+
+		vi.spyOn(bellCurveTableModule, 'createBellCurveTable').mockReturnValue({
+			type: 'solved-bell',
+			diceSize: [6, 6],
 			table: [],
 		});
 
@@ -65,6 +87,8 @@ describe('mapEntriesToRandomTable', () => {
 		expect(rerollTableModule.createRerollTable).not.toHaveBeenCalled();
 		expect(solvedSingleTableModule.createSolvedSingleTable).not.toHaveBeenCalled();
 		expect(solvedDoubleTableModule.createSolvedDoubleTable).not.toHaveBeenCalled();
+		expect(bellCurveTableModule.createBellCurveTable).not.toHaveBeenCalled();
+		expect(rerollBellTableModule.createRerollBellTable).not.toHaveBeenCalled();
 	});
 
 	test('should handle single entry', () => {
@@ -81,6 +105,8 @@ describe('mapEntriesToRandomTable', () => {
 		expect(rerollTableModule.createRerollTable).not.toHaveBeenCalled();
 		expect(solvedSingleTableModule.createSolvedSingleTable).not.toHaveBeenCalled();
 		expect(solvedDoubleTableModule.createSolvedDoubleTable).not.toHaveBeenCalled();
+		expect(bellCurveTableModule.createBellCurveTable).not.toHaveBeenCalled();
+		expect(rerollBellTableModule.createRerollBellTable).not.toHaveBeenCalled();
 	});
 
 	test('should handle coin flip for two entries with d2 enabled', () => {
@@ -100,6 +126,8 @@ describe('mapEntriesToRandomTable', () => {
 		expect(rerollTableModule.createRerollTable).not.toHaveBeenCalled();
 		expect(solvedSingleTableModule.createSolvedSingleTable).not.toHaveBeenCalled();
 		expect(solvedDoubleTableModule.createSolvedDoubleTable).not.toHaveBeenCalled();
+		expect(bellCurveTableModule.createBellCurveTable).not.toHaveBeenCalled();
+		expect(rerollBellTableModule.createRerollBellTable).not.toHaveBeenCalled();
 	});
 
 	test('should call createSolvedSingleTable when entries fit in a single die', () => {
@@ -133,6 +161,8 @@ describe('mapEntriesToRandomTable', () => {
 		expect(rerollTableModule.createRerollTable).not.toHaveBeenCalled();
 		expect(solvedSingleTableModule.createSolvedSingleTable).not.toHaveBeenCalled();
 		expect(solvedDoubleTableModule.createSolvedDoubleTable).not.toHaveBeenCalled();
+		expect(bellCurveTableModule.createBellCurveTable).not.toHaveBeenCalled();
+		expect(rerollBellTableModule.createRerollBellTable).not.toHaveBeenCalled();
 	});
 
 	test('should call createRerollTable when mode is reroll and entries don\'t fit neatly', () => {
@@ -143,5 +173,26 @@ describe('mapEntriesToRandomTable', () => {
 		expect(rerollTableModule.createRerollTable).toHaveBeenCalledWith(entries, rerollSettings);
 		expect(forcedTableModule.createForcedTable).not.toHaveBeenCalled();
 		expect(solvedSingleTableModule.createSolvedSingleTable).not.toHaveBeenCalled();
+	});
+
+	test('should use createRerollBellTable for bell mode when no valid dice sizes', () => {
+		const entries = ['Result 1', 'Result 2', 'Result 3', 'Result 4', 'Result 5', 'Result 6'];
+
+		mapEntriesToRandomTable(entries, bellSettings);
+
+		expect(rerollBellTableModule.createRerollBellTable).toHaveBeenCalledWith(entries, bellSettings);
+		expect(bellCurveTableModule.createBellCurveTable).not.toHaveBeenCalled();
+		expect(forcedTableModule.createForcedTable).not.toHaveBeenCalled();
+		expect(rerollTableModule.createRerollTable).not.toHaveBeenCalled();
+	});
+
+	test('should use createBellCurveTable for bell mode with double dice', () => {
+		const entries = ['Result 1', 'Result 2', 'Result 3', 'Result 4', 'Result 5'];
+
+		mapEntriesToRandomTable(entries, bellSettings);
+
+		expect(bellCurveTableModule.createBellCurveTable).toHaveBeenCalledWith(entries, [8, 8]);
+		expect(rerollBellTableModule.createRerollBellTable).not.toHaveBeenCalled();
+		expect(solvedDoubleTableModule.createSolvedDoubleTable).not.toHaveBeenCalled();
 	});
 });

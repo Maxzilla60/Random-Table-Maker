@@ -14,36 +14,67 @@
 		{@const { type, diceSize, table } = $table$}
 		{@const [firstDie, secondDie] = diceSize}
 		{@const showOdds = $showOdds$}
+
 		<thead>
 		<tr>
-			<th colspan={secondDie ? 2 : 1}>
-				{#if firstDie === 2}
-					coin
-				{:else}
-					d{ firstDie }
-				{/if}
-				{#if secondDie}
+			{#if type === 'solved-double' || type === 'reroll-double' || type === 'forced'}
+				<th colspan="2">
+					{#if firstDie === 2}
+						coin
+					{:else}
+						d{ firstDie }
+					{/if}
 					{#if secondDie === 2}
 						& coin
 					{:else}
 						& d{ secondDie }
 					{/if}
-				{/if}
-				{#if type === 'forced'}
+					{#if type === 'forced'}
 						<span title="Warning: This d100 table is 'forced' and does not have equal odds! Entries near the top of the table will have slightly higher odds (toggle on the odds in the settings).">
 							(⚠️)
 						</span>
-				{/if}
-				{#if type === 'reroll-single' || type === 'reroll-double'}
+					{:else if type === 'reroll-double'}
 						<span title={`Warning: This table has had additional 'reroll' entries added to ensure equal odds.`}>
 							(⚠️)
 						</span>
-				{/if}
-			</th>
+					{/if}
+				</th>
+			{:else if type === 'solved-bell' || type === 'reroll-bell'}
+				<th>
+					{#if firstDie === secondDie}
+						2d{ firstDie }
+					{:else}
+						d{ firstDie } + d{ secondDie }
+					{/if}
+					{#if type === 'reroll-bell'}
+						<span title={`Warning: This table has had additional 'reroll' entries added to ensure good distribution.`}>
+							(⚠️)
+						</span>
+					{/if}
+				</th>
+			{:else if type === 'unsolved-bell'}
+				<th>not solvable</th>
+			{:else}
+				<th>
+					d{ firstDie }
+					{#if type === 'reroll-single'}
+						<span title={`Warning: This table has had additional 'reroll' entries added to ensure equal odds.`}>
+							(⚠️)
+						</span>
+					{/if}
+				</th>
+			{/if}
 			{#if showOdds}
 				<th>Odds</th>
 			{/if}
-			<th>Result ({ table.length })</th>
+			<th>
+				Result
+				{#if type === 'reroll-double' || type === 'reroll-bell' || type === 'reroll-single'}
+					({ $entries$.length } + { table.length - $entries$.length })
+				{:else}
+					({ $entries$.length })
+				{/if}
+			</th>
 		</tr>
 		</thead>
 
