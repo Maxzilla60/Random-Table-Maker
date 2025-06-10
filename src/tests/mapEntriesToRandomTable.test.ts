@@ -130,6 +130,32 @@ describe('mapEntriesToRandomTable', () => {
 		expect(rerollBellTableModule.createRerollBellTable).not.toHaveBeenCalled();
 	});
 
+	test('should handle d3 with Roman numerals when DCC dice is enabled', () => {
+		const entries = ['Option A', 'Option B', 'Option C'];
+		const settingsWithDCCDice: Settings = {
+			...defaultSettings,
+			enableDCCDice: true,
+		};
+		const result = mapEntriesToRandomTable(entries, settingsWithDCCDice);
+
+		expect(result).toEqual({
+			type: 'solved-single',
+			diceSize: [3],
+			table: [
+				{ value: 'I', result: 'Option A', odds: 33.33, isReroll: false },
+				{ value: 'II', result: 'Option B', odds: 33.33, isReroll: false },
+				{ value: 'III', result: 'Option C', odds: 33.33, isReroll: false },
+			],
+		});
+
+		expect(forcedTableModule.createForcedTable).not.toHaveBeenCalled();
+		expect(rerollTableModule.createRerollTable).not.toHaveBeenCalled();
+		expect(solvedSingleTableModule.createSolvedSingleTable).not.toHaveBeenCalled();
+		expect(solvedDoubleTableModule.createSolvedDoubleTable).not.toHaveBeenCalled();
+		expect(bellCurveTableModule.createBellCurveTable).not.toHaveBeenCalled();
+		expect(rerollBellTableModule.createRerollBellTable).not.toHaveBeenCalled();
+	});
+
 	test('should call createSolvedSingleTable when entries fit in a single die', () => {
 		const entries = ['A', 'B', 'C', 'D'];
 

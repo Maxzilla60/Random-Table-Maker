@@ -9,7 +9,7 @@
 - [ ] Dice
   - [x] No coins
   - [x] DCC dice
-    - [ ] d3 = I, II, III
+    - [x] d3 = I, II, III
   - [ ] Fudge dice
 - [x] Modes
   - [x] "Reroll" mode

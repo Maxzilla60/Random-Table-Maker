@@ -142,9 +142,9 @@ describe('createSolvedDoubleTable', () => {
 
 		const table = result.table;
 		expect(table.map(({ firstValue }) => firstValue)).toStrictEqual(concat(
-			new Array(7).fill('1'),
-			new Array(7).fill('2'),
-			new Array(7).fill('3'),
+			new Array(7).fill('I'),
+			new Array(7).fill('II'),
+			new Array(7).fill('III'),
 		));
 		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
 			'1', '2', '3', '4', '5', '6', '7',
@@ -157,6 +157,35 @@ describe('createSolvedDoubleTable', () => {
 			7, undefined, undefined, undefined, undefined, undefined, undefined,
 		]);
 		table.forEach(({ odds }) => expect(odds).toEqual(100 / 21));
+		expect(table.map(({ result }) => result)).toEqual(entries);
+	});
+
+	test('should create a table with d3 & d4 using Roman numerals when DCC dice is enabled', () => {
+		const entries = range(12).map(i => `Result ${i + 1}`);
+		const diceSizes: DiceSizes = [3, 4];
+		const result = createSolvedDoubleTable(entries, diceSizes);
+
+		expect(result.diceSize).toStrictEqual([3, 4]);
+		expect(result.type).toBe('solved-double');
+		expect(result.table).toHaveLength(12);
+
+		const table = result.table;
+		expect(table.map(({ firstValue }) => firstValue)).toStrictEqual(concat(
+			new Array(4).fill('I'),
+			new Array(4).fill('II'),
+			new Array(4).fill('III'),
+		));
+		expect(table.map(({ secondValue }) => secondValue)).toStrictEqual([
+			'1', '2', '3', '4',
+			'1', '2', '3', '4',
+			'1', '2', '3', '4',
+		]);
+		expect(table.map(({ rowspan }) => rowspan)).toEqual([
+			4, undefined, undefined, undefined,
+			4, undefined, undefined, undefined,
+			4, undefined, undefined, undefined,
+		]);
+		table.forEach(({ odds }) => expect(odds).toEqual(100 / 12));
 		expect(table.map(({ result }) => result)).toEqual(entries);
 	});
 });

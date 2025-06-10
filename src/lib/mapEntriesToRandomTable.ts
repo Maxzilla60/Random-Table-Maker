@@ -32,6 +32,17 @@ export function mapEntriesToRandomTable(entries: string[], settings: Settings): 
 			],
 		};
 	}
+	if (settings.enableDCCDice && entries.length === 3) {
+		return {
+			type: 'solved-single',
+			diceSize: [3],
+			table: [
+				{ value: 'I', result: entries[0], odds: 33.33, isReroll: false },
+				{ value: 'II', result: entries[1], odds: 33.33, isReroll: false },
+				{ value: 'III', result: entries[2], odds: 33.33, isReroll: false },
+			],
+		};
+	}
 
 	const diceSizes = getDiceSizesForTable(entries.length, settings);
 
