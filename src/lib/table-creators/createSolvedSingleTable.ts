@@ -1,6 +1,6 @@
 import { chain } from 'lodash';
-import { mapRangesToValues } from './mapRangesToValues';
-import type { DiceSize, SingleRandomTable, SingleTableEntry } from './types';
+import { mapRangesToValues } from '../table-util/mapRangesToValues';
+import type { DiceSize, SingleRandomTable, SingleTableEntry } from '../types';
 
 export function createSolvedSingleTable(entries: string[], diceSize: DiceSize): SingleRandomTable {
 	const table = chain(entries.length)

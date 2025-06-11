@@ -1,7 +1,7 @@
 import { concat } from 'lodash';
-import { getRerollEntriesLength } from './getRerollEntriesLength';
-import { mapEntriesToRandomTable } from './mapEntriesToRandomTable';
-import type { DoubleTableEntry, RandomTable, Settings, SingleTableEntry } from './types';
+import { mapEntriesToRandomTable } from '../mapEntriesToRandomTable';
+import { getRerollEntriesLength } from '../table-util/getRerollEntriesLength';
+import type { DoubleTableEntry, RandomTable, Settings, SingleTableEntry } from '../types';
 
 export function createRerollTable(entries: string[], settings: Settings): RandomTable {
 	const rerollLength = getRerollEntriesLength(entries.length, settings);

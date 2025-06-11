@@ -1,6 +1,6 @@
 import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
-import { createRerollTable } from '../lib/createRerollTable';
+import { createRerollTable } from '../lib/table-creators/createRerollTable';
 import type { Settings } from '../lib/types';
 
 describe('createRerollTable', () => {

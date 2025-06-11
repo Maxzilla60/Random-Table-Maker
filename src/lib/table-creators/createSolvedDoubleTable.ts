@@ -1,6 +1,6 @@
 import { chain } from 'lodash';
-import { mapRangesToValues } from './mapRangesToValues';
-import type { DiceSize, DoubleRandomTable, DoubleTableEntry } from './types';
+import { mapRangesToValues } from '../table-util/mapRangesToValues';
+import type { DiceSize, DoubleRandomTable, DoubleTableEntry } from '../types';
 
 export function createSolvedDoubleTable(entries: string[], diceSizes: [DiceSize, DiceSize]): DoubleRandomTable {
 	const [firstDie, secondDie] = diceSizes;

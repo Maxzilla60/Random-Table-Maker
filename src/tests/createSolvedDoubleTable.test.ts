@@ -1,6 +1,6 @@
 import { concat, range } from 'lodash';
 import { describe, expect, test } from 'vitest';
-import { createSolvedDoubleTable } from '../lib/createSolvedDoubleTable';
+import { createSolvedDoubleTable } from '../lib/table-creators/createSolvedDoubleTable';
 import type { DiceSizes } from '../lib/types';
 
 describe('createSolvedDoubleTable', () => {

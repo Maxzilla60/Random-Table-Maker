@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-import * as bellCurveTableModule from '../lib/createBellCurveTable';
-import * as forcedTableModule from '../lib/createForcedTable';
-import * as rerollBellTableModule from '../lib/createRerollBellTable';
-import * as rerollTableModule from '../lib/createRerollTable';
-import * as solvedDoubleTableModule from '../lib/createSolvedDoubleTable';
-import * as solvedSingleTableModule from '../lib/createSolvedSingleTable';
 import { mapEntriesToRandomTable } from '../lib/mapEntriesToRandomTable';
+import * as bellCurveTableModule from '../lib/table-creators/createBellCurveTable';
+import * as forcedTableModule from '../lib/table-creators/createForcedTable';
+import * as rerollBellTableModule from '../lib/table-creators/createRerollBellTable';
+import * as rerollTableModule from '../lib/table-creators/createRerollTable';
+import * as solvedDoubleTableModule from '../lib/table-creators/createSolvedDoubleTable';
+import * as solvedSingleTableModule from '../lib/table-creators/createSolvedSingleTable';
 import type { Settings } from '../lib/types';
 
 describe('mapEntriesToRandomTable', () => {

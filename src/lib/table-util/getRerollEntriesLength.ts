@@ -1,6 +1,6 @@
-import { MAX_TABLE_LENGTH } from './constants';
+import { MAX_TABLE_LENGTH } from '../constants';
+import type { Settings } from '../types';
 import { getDiceSizesForTable } from './getDiceSizesForTable';
-import type { Settings } from './types';
 
 export function getRerollEntriesLength(entriesLength: number, settings: Settings, rerollLength = 0): number {
 	if (entriesLength + rerollLength > MAX_TABLE_LENGTH) {

@@ -1,10 +1,10 @@
-import { createBellCurveTable } from './createBellCurveTable';
-import { createForcedTable } from './createForcedTable';
-import { createRerollBellTable } from './createRerollBellTable';
-import { createRerollTable } from './createRerollTable';
-import { createSolvedDoubleTable } from './createSolvedDoubleTable';
-import { createSolvedSingleTable } from './createSolvedSingleTable';
-import { getDiceSizesForTable } from './getDiceSizesForTable';
+import { createBellCurveTable } from './table-creators/createBellCurveTable';
+import { createForcedTable } from './table-creators/createForcedTable';
+import { createRerollBellTable } from './table-creators/createRerollBellTable';
+import { createRerollTable } from './table-creators/createRerollTable';
+import { createSolvedDoubleTable } from './table-creators/createSolvedDoubleTable';
+import { createSolvedSingleTable } from './table-creators/createSolvedSingleTable';
+import { getDiceSizesForTable } from './table-util/getDiceSizesForTable';
 import type { RandomTable, Settings } from './types';
 
 export function mapEntriesToRandomTable(entries: string[], settings: Settings): RandomTable {

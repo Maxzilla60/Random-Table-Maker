@@ -1,6 +1,6 @@
 import { chain, curry, floor } from 'lodash';
-import { mapRangesToValues } from './mapRangesToValues';
-import type { Forced100RandomTable, SingleTableEntry } from './types';
+import { mapRangesToValues } from '../table-util/mapRangesToValues';
+import type { Forced100RandomTable, SingleTableEntry } from '../types';
 
 export function createForcedTable(entries: string[]): Forced100RandomTable {
 	const diceSize: [100] = [100];

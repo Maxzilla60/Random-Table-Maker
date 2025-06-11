@@ -1,6 +1,6 @@
 import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
-import { createSolvedSingleTable } from '../lib/createSolvedSingleTable';
+import { createSolvedSingleTable } from '../lib/table-creators/createSolvedSingleTable';
 
 describe('createSolvedSingleTable', () => {
 	test('should create a table with d4', () => {

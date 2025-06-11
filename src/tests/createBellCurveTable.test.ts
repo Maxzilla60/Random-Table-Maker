@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { createBellCurveTable } from '../lib/createBellCurveTable';
+import { createBellCurveTable } from '../lib/table-creators/createBellCurveTable';
 import type { SingleTableEntry } from '../lib/types';
 
 describe('createBellCurveTable', () => {

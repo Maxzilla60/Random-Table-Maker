@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { DCC_DICE_SIZES } from '../lib/constants';
-import { createRerollBellTable } from '../lib/createRerollBellTable';
+import { createRerollBellTable } from '../lib/table-creators/createRerollBellTable';
 import type { Settings, SingleTableEntry } from '../lib/types';
 
 describe('createRerollBellTable', () => {

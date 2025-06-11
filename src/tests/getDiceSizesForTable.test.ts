@@ -1,7 +1,7 @@
 import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
 import { MAX_TABLE_LENGTH } from '../lib/constants';
-import { getDiceSizesForTable } from '../lib/getDiceSizesForTable';
+import { getDiceSizesForTable } from '../lib/table-util/getDiceSizesForTable';
 import { type Settings } from '../lib/types';
 
 describe('getDiceSizesForTable', () => {

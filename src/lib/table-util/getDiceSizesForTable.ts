@@ -1,6 +1,6 @@
 import { chain, concat } from 'lodash';
-import { DCC_DICE_SIZES, DEFAULT_DICE_SIZES } from './constants';
-import type { DiceSize, DiceSizes, Settings } from './types';
+import { DCC_DICE_SIZES, DEFAULT_DICE_SIZES } from '../constants';
+import type { DiceSize, DiceSizes, Settings } from '../types';
 
 export function getDiceSizesForTable(entriesLength: number, settings: Settings): DiceSizes {
 	if (entriesLength === 0) {

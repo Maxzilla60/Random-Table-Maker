@@ -1,6 +1,6 @@
 import { range } from 'lodash';
 import { describe, expect, test } from 'vitest';
-import { createForcedTable } from '../lib/createForcedTable';
+import { createForcedTable } from '../lib/table-creators/createForcedTable';
 
 describe('createForcedTable', () => {
 	test('should create a forced d100 table for 7 entries', () => {

@@ -1,6 +1,6 @@
 import { chain, range, sum } from 'lodash';
-import { mapRangesToValues } from './mapRangesToValues';
-import type { BellSolvedRandomTable, DiceSize, SingleTableEntry } from './types';
+import { mapRangesToValues } from '../table-util/mapRangesToValues';
+import type { BellSolvedRandomTable, DiceSize, SingleTableEntry } from '../types';
 
 export function createBellCurveTable(entries: string[], diceSizes: [DiceSize, DiceSize]): BellSolvedRandomTable {
 	const [firstDie, secondDie] = diceSizes;

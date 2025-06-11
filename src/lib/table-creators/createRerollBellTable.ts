@@ -1,7 +1,7 @@
 import { ceil, chunk, concat, isNil } from 'lodash';
-import { getRerollEntriesLength } from './getRerollEntriesLength';
-import { mapEntriesToRandomTable } from './mapEntriesToRandomTable';
-import type { BellSolvedRandomTable, BellUnsolvedRandomTable, DiceSize, Settings, SingleTableEntry } from './types';
+import { mapEntriesToRandomTable } from '../mapEntriesToRandomTable';
+import { getRerollEntriesLength } from '../table-util/getRerollEntriesLength';
+import type { BellSolvedRandomTable, BellUnsolvedRandomTable, DiceSize, Settings, SingleTableEntry } from '../types';
 
 export function createRerollBellTable(entries: string[], settings: Settings): BellSolvedRandomTable | BellUnsolvedRandomTable {
 	const rerollLength = getRerollEntriesLength(entries.length, settings);
