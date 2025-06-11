@@ -35,7 +35,6 @@
 	export function handleDragEnd(): void {
 		draggingIndex$.set(null);
 	}
-
 </script>
 
 <table>
@@ -92,6 +91,7 @@
 							newEntryInput$.set('');
 						}}
 				disabled={$entries$.length >= MAX_TABLE_LENGTH}
+				title={$entries$.length >= MAX_TABLE_LENGTH ? `Maximum entries reached (${MAX_TABLE_LENGTH})` : undefined}
 			>
 				➕
 			</button>
