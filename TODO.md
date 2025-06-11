@@ -3,7 +3,13 @@
 - [x] Editing toggle
 - [x] Show warning if 'forced'
 - [x] Animations (@formkit/auto-animate)
+- [x] Vitest with coverage
 - [ ] Export
+  - [ ] Text
+  - [ ] Markdown
+  - [ ] JSON
+  - [ ] CSV
+- [ ] About (mention max table size)
 - [x] Drag & drop reordering
 - [ ] Drag & drop library? (https://www.reddit.com/r/sveltejs/comments/1181gte/drag_drop_in_svelte_hunting_for_libs/)
 - [ ] Dice
@@ -16,7 +22,7 @@
   - [x] "Bell curve" mode
 - [ ] Documentation
 - [ ] Svelte integration tests?
-- [ ] Copy-paste parsing
+- [ ] Import
 - [ ] Dice icons
 - [ ] Odds progress bar
 - [ ] Sort alphabetically button
