@@ -41,6 +41,11 @@ export function addEntry(newEntry: string): void {
 	});
 }
 
+export function importEntries(entriesToImport: string[]): void {
+	const entries = entriesToImport.map(value => ({ value, id: nanoid() }));
+	entriesWritable.set(entries);
+}
+
 export function reorderEntries(fromIndex: number, toIndex: number): void {
 	entriesWritable.update(entries => {
 		const result = [...entries];

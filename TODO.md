@@ -22,7 +22,7 @@
   - [x] "Bell curve" mode
 - [ ] Documentation
 - [ ] Svelte integration tests?
-- [ ] Import
+- [x] Import
 - [ ] Dice icons
 - [ ] Odds progress bar
 - [ ] Sort alphabetically button
