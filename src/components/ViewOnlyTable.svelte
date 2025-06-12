@@ -1,8 +1,8 @@
 <script lang="ts">
 	import autoAnimate from '@formkit/auto-animate';
-	import { entries$ } from '../state/entries';
-	import { showOdds$ } from '../state/settings';
-	import { table$ } from '../state/table';
+	import { entries$ } from '../lib/state/entries';
+	import { showOdds$ } from '../lib/state/settings';
+	import { table$ } from '../lib/state/table';
 </script>
 
 <table>

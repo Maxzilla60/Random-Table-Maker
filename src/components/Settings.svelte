@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enableD2$, enableDCCDice$, mode$, preferLargerDice$, showOdds$ } from '../state/settings';
+	import { enableD2$, enableDCCDice$, mode$, preferLargerDice$, showOdds$ } from '../lib/state/settings';
 </script>
 
 <details>

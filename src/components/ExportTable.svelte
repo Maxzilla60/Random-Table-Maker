@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { derived, writable } from 'svelte/store';
+	import { table$ } from '../lib/state/table';
 	import { mapTableToCSV } from '../lib/table-formatters/mapTableToCSV';
 	import { mapTableToHTML } from '../lib/table-formatters/mapTableToHTML';
 	import { mapTableToMarkdown } from '../lib/table-formatters/mapTableToMarkdown';
 	import { mapTableToSimpleText } from '../lib/table-formatters/mapTableToSimpleText';
 	import { mapTableToText } from '../lib/table-formatters/mapTableToText';
-	import { table$ } from '../state/table';
 	import ViewOnlyTable from './ViewOnlyTable.svelte';
 
 	const format$ = writable<'text' | 'simple-text' | 'markdown' | 'csv' | 'html'>('simple-text');

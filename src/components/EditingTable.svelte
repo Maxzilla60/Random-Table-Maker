@@ -2,7 +2,7 @@
 	import autoAnimate from '@formkit/auto-animate';
 	import { get, writable } from 'svelte/store';
 	import { MAX_TABLE_LENGTH } from '../lib/constants.js';
-	import { addEntry, clearEntries, editEntry, entries$, removeEntry, reorderEntries } from '../state/entries.js';
+	import { addEntry, clearEntries, editEntry, entries$, removeEntry, reorderEntries } from '../lib/state/entries';
 
 	const newEntryInput$ = writable<string>('');
 

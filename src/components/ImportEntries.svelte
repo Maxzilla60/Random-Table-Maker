@@ -2,7 +2,7 @@
 	import { isEmpty, negate, trim } from 'lodash';
 	import { writable } from 'svelte/store';
 	import { MAX_TABLE_LENGTH } from '../lib/constants.js';
-	import { importEntries } from '../state/entries.js';
+	import { importEntries } from '../lib/state/entries';
 
 	const importText$ = writable<string>('');
 

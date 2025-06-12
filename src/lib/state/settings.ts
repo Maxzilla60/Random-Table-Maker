@@ -1,5 +1,5 @@
 import { derived, type Readable, writable } from 'svelte/store';
-import type { Settings } from '../lib/types';
+import type { Settings } from '../types';
 
 const LOCAL_STORAGE_KEY = 'random-table-maker-settings';
 const DEFAULT_SETTINGS: Settings = {
