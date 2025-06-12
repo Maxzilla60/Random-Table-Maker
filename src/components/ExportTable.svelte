@@ -1,20 +1,14 @@
 <script lang="ts">
-	import { map } from 'lodash';
 	import { derived, writable } from 'svelte/store';
-	import { mapEntriesToRandomTable } from '../lib/mapEntriesToRandomTable';
 	import { mapTableToCSV } from '../lib/table-formatters/mapTableToCSV';
 	import { mapTableToHTML } from '../lib/table-formatters/mapTableToHTML';
 	import { mapTableToMarkdown } from '../lib/table-formatters/mapTableToMarkdown';
 	import { mapTableToSimpleText } from '../lib/table-formatters/mapTableToSimpleText';
 	import { mapTableToText } from '../lib/table-formatters/mapTableToText';
-	import { entries$ } from '../state/entries';
-	import { settings$ } from '../state/settings';
+	import { table$ } from '../state/table';
 	import ViewOnlyTable from './ViewOnlyTable.svelte';
 
 	const format$ = writable<'text' | 'simple-text' | 'markdown' | 'csv' | 'html'>('simple-text');
-	const table$ = derived([entries$, settings$], ([entries, settings]) =>
-		mapEntriesToRandomTable(map(entries, 'value'), settings),
-	);
 	const formattedTable$ = derived([table$, format$], ([table, format]) => {
 		switch (format) {
 			case 'simple-text':

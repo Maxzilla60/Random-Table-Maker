@@ -1,14 +1,8 @@
 <script lang="ts">
 	import autoAnimate from '@formkit/auto-animate';
-	import { map } from 'lodash';
-	import { derived } from 'svelte/store';
-	import { mapEntriesToRandomTable } from '../lib/mapEntriesToRandomTable';
 	import { entries$ } from '../state/entries';
-	import { settings$, showOdds$ } from '../state/settings';
-
-	const table$ = derived([entries$, settings$], ([entries, settings]) =>
-		mapEntriesToRandomTable(map(entries, 'value'), settings),
-	);
+	import { showOdds$ } from '../state/settings';
+	import { table$ } from '../state/table';
 </script>
 
 <table>
