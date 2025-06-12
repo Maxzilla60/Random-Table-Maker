@@ -2,7 +2,7 @@
 	import autoAnimate from '@formkit/auto-animate';
 	import { get, writable } from 'svelte/store';
 	import { MAX_TABLE_LENGTH } from '../lib/constants.js';
-	import { addEntry, clearEntries, entries$, removeEntry, reorderEntries } from '../state/entries.js';
+	import { addEntry, clearEntries, editEntry, entries$, removeEntry, reorderEntries } from '../state/entries.js';
 
 	const newEntryInput$ = writable<string>('');
 
@@ -62,7 +62,20 @@
 			>
 				↕️
 			</td>
-			<td>{entry.value}</td>
+			<td>
+				<input
+					type="text"
+					bind:value={entry.value}
+					onkeydown={e => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							editEntry(index, entry.value);
+						}
+					}}
+					onblur={() => editEntry(index, entry.value)}
+					placeholder="Edit entry"
+				/>
+			</td>
 			<td>
 				<button onclick={() => removeEntry(index)}>➖</button>
 			</td>
@@ -108,5 +121,9 @@
 
     td[draggable="true"] {
         cursor: move;
+    }
+
+    input {
+        width: 100%;
     }
 </style>

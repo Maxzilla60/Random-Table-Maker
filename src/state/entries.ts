@@ -46,6 +46,17 @@ export function importEntries(entriesToImport: string[]): void {
 	entriesWritable.set(entries);
 }
 
+export function editEntry(index: number, newValue: string): void {
+	entriesWritable.update(entries => {
+		if (index < 0 || index >= entries.length) {
+			return entries;
+		}
+		const updatedEntries = [...entries];
+		updatedEntries[index] = { ...updatedEntries[index], value: newValue.trim() };
+		return updatedEntries;
+	});
+}
+
 export function reorderEntries(fromIndex: number, toIndex: number): void {
 	entriesWritable.update(entries => {
 		const result = [...entries];

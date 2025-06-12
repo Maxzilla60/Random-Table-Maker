@@ -4,6 +4,7 @@
 - [x] Show warning if 'forced'
 - [x] Animations (@formkit/auto-animate)
 - [x] Vitest with coverage
+- [x] Edit entry
 - [x] Export
   - [x] Text
   - [x] Markdown
