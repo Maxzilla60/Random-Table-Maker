@@ -41,7 +41,7 @@
 		<label>
 			<input type="radio" bind:group={$mode$} value="bell"/>
 			<b>Bell Curve:</b> Uses a bell curve distribution to spread the entries, which means that entries near the middle of the table will have higher odds than those at the edges.
-			Will work similarly to the "Reroll" mode if it cannot find a fitting dice combination. Will not work for tables with 40 or more entries.
+			Will work similarly to the "Reroll" mode if it cannot find a fitting dice combination. Tables with 40 or more entries are not solvable.
 		</label>
 	</fieldset>
 </details>
