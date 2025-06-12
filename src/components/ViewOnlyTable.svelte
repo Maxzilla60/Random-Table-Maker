@@ -97,7 +97,7 @@
 					{/if}
 					<td
 						style:font-style={isReroll ? 'italic' : 'initial'}
-						colspan={isReroll ? 2 : 1}
+						colspan={isReroll ? 2 : undefined}
 					>
 						{result}
 					</td>
@@ -119,7 +119,7 @@
 					{/if}
 					<td
 						style:font-style={isReroll ? 'italic' : 'initial'}
-						colspan={isReroll ? 2 : 1}
+						colspan={isReroll ? 2 : undefined}
 					>
 						{result}
 					</td>

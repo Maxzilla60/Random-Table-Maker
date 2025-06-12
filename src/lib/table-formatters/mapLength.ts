@@ -1,0 +1,10 @@
+import type { RandomTable } from '../types';
+
+export function mapLength(type: RandomTable['type'], table: RandomTable['table']): string {
+	if (type === 'reroll-double' || type === 'reroll-bell' || type === 'reroll-single') {
+		const entriesLength = table.length;
+		return `${entriesLength} + ${table.length - entriesLength}`;
+	}
+
+	return String(table.length);
+}

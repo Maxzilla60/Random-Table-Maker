@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import EditingTable from './components/EditingTable.svelte';
+	import ExportTable from './components/ExportTable.svelte';
 	import ImportEntries from './components/ImportEntries.svelte';
 	import Settings from './components/Settings.svelte';
 	import ViewOnlyTable from './components/ViewOnlyTable.svelte';
@@ -25,4 +26,6 @@
 	{:else}
 		<ViewOnlyTable/>
 	{/if}
+
+	<ExportTable/>
 </main>

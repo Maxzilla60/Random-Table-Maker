@@ -4,11 +4,11 @@
 - [x] Show warning if 'forced'
 - [x] Animations (@formkit/auto-animate)
 - [x] Vitest with coverage
-- [ ] Export
-  - [ ] Text
-  - [ ] Markdown
-  - [ ] JSON
-  - [ ] CSV
+- [x] Export
+  - [x] Text
+  - [x] Markdown
+  - [x] CSV
+  - [ ] JSON?
 - [ ] About (mention max table size)
 - [x] Drag & drop reordering
 - [ ] Drag & drop library? (https://www.reddit.com/r/sveltejs/comments/1181gte/drag_drop_in_svelte_hunting_for_libs/)
