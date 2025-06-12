@@ -1,4 +1,4 @@
-export const MAX_TABLE_LENGTH = 50;
+export const MAX_TABLE_LENGTH = 100;
 
 export const DEFAULT_DICE_SIZES = [
 	2,
