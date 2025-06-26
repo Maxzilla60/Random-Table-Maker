@@ -3,8 +3,8 @@ import type { DoubleTableEntry, RandomTable, SingleTableEntry } from '../types';
 import { mapDiceSize } from './mapDiceSize';
 import { mapLength } from './mapLength';
 
-export function mapTableToMarkdown({ type, table, diceSize }: RandomTable): string {
-	const header = `| ${mapDiceSize(type, diceSize)} | Result (${(mapLength(type, table))}) |`;
+export function mapTableToMarkdown({ type, table, diceSize }: RandomTable, entriesLength: number): string {
+	const header = `| ${mapDiceSize(type, diceSize)} | Result (${(mapLength(type, table, entriesLength))}) |`;
 	const separator = '| --- | --- |';
 	const entries = mapTableEntries(type, table);
 	return concat(header, separator, entries).join('\n');

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { derived, writable } from 'svelte/store';
+	import { entries$ } from '../lib/state/entries';
 	import { table$ } from '../lib/state/table';
 	import { mapTableToCSV } from '../lib/table-formatters/mapTableToCSV';
 	import { mapTableToHTML } from '../lib/table-formatters/mapTableToHTML';
@@ -9,14 +10,14 @@
 	import ViewOnlyTable from './ViewOnlyTable.svelte';
 
 	const format$ = writable<'text' | 'simple-text' | 'markdown' | 'csv' | 'html'>('simple-text');
-	const formattedTable$ = derived([table$, format$], ([table, format]) => {
+	const formattedTable$ = derived([table$, entries$, format$], ([table, entries, format]) => {
 		switch (format) {
 			case 'simple-text':
 				return mapTableToSimpleText(table);
 			case 'text':
 				return mapTableToText(table);
 			case 'markdown':
-				return mapTableToMarkdown(table);
+				return mapTableToMarkdown(table, entries.length);
 			case 'csv':
 				return mapTableToCSV(table);
 			case 'html':
