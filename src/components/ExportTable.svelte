@@ -19,7 +19,7 @@
 			case 'markdown':
 				return mapTableToMarkdown(table, entries.length);
 			case 'csv':
-				return mapTableToCSV(table);
+				return mapTableToCSV(table, entries.length);
 			case 'html':
 				const viewOnlyTable = document.getElementById('view-only-table')!;
 				return mapTableToHTML(viewOnlyTable);

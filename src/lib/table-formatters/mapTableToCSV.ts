@@ -1,9 +1,10 @@
 import { concat } from 'lodash';
 import type { DoubleTableEntry, RandomTable, SingleTableEntry } from '../types';
 import { mapDiceSize } from './mapDiceSize';
+import { mapLength } from './mapLength';
 
-export function mapTableToCSV({ type, table, diceSize }: RandomTable): string {
-	const header = `${mapDiceSize(type, diceSize)},Result`;
+export function mapTableToCSV({ type, table, diceSize }: RandomTable, entriesLength: number): string {
+	const header = `${mapDiceSize(type, diceSize)},Result (${mapLength(type, table, entriesLength)})`;
 	const entries = mapTableEntries(type, table);
 
 	return concat(header, entries).join('\n');
