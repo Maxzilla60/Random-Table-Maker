@@ -22,7 +22,6 @@ A random table maker for table top roleplaying games. Input your entries and it 
 - Utility: [lodash](https://lodash.com)
 - Classless Styling: [new.css](https://newcss.net)
 - Animation: [autoAnimate](https://auto-animate.formkit.com)
-- Icons: [Lucide](https://lucide.netlify.app)
 
 <a href="https://gitmoji.dev">
   <img
