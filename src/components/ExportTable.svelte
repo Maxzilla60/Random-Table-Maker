@@ -28,10 +28,13 @@
 		}
 	});
 
+	const copied$ = writable(false);
+	formattedTable$.subscribe(() => copied$.set(false));
+
 	function copyToClipboard(formattedTable: string): void {
-		navigator.clipboard.writeText(formattedTable).catch(err => {
-			console.error('Failed to copy: ', err);
-		});
+		navigator.clipboard.writeText(formattedTable)
+			.catch(err => console.error('Failed to copy: ', err))
+			.then(() => copied$.set(true));
 	}
 </script>
 
@@ -60,7 +63,13 @@
 
 	<pre>{ $formattedTable$ }</pre>
 
-	<button onclick={() => copyToClipboard($formattedTable$)}>📋 Copy</button>
+	<button onclick={() => copyToClipboard($formattedTable$)}>
+		{#if $copied$}
+			✅ Copied!
+		{:else}
+			📋 Copy
+		{/if}
+	</button>
 
 	<div id="view-only-table">
 		<ViewOnlyTable/>
