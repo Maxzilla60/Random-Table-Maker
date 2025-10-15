@@ -29,9 +29,9 @@
 
 	<ImportEntries/>
 
-	<label>
+	<label id="edit-table-toggle">
 		<input type="checkbox" bind:checked={$editing$}/>
-		Edit table
+		✏️ Edit table
 	</label>
 
 	{#if $editing$}
@@ -42,3 +42,39 @@
 
 	<ExportTable/>
 </main>
+<footer>
+	💛 made by
+	<a href="https://linktr.ee/HungryMaxzilla" rel="noreferrer noopener" target="_blank">Maxzilla</a>
+</footer>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
+    * {
+        font-family: "Averia Serif Libre", serif;
+    }
+
+    h1 {
+        font-family: "UnifrakturCook", serif;
+        text-align: center;
+        font-size: 3rem;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+
+    #edit-table-toggle {
+        display: block;
+        font-weight: bold;
+        padding: .6rem 1rem;
+        margin-bottom: 1rem;
+        background: var(--nc-bg-2);
+        border: 1px solid var(--nc-bg-3);
+        border-radius: 4px;
+    }
+
+    footer {
+        text-align: center;
+        font-size: smaller;
+    }
+</style>

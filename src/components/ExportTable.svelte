@@ -61,7 +61,7 @@
 		HTML
 	</label>
 
-	<pre>{ $formattedTable$ }</pre>
+	<output>{ $formattedTable$ }</output>
 
 	<button onclick={() => copyToClipboard($formattedTable$)}>
 		{#if $copied$}
@@ -77,6 +77,16 @@
 </details>
 
 <style>
+    output {
+        display: block;
+        font-family: var(--nc-font-mono), monospace;
+        white-space: pre;
+        font-size: .9rem;
+        border: 1px solid var(--nc-bg-3);
+        border-radius: 4px;
+        padding: 1rem 1.4rem;
+    }
+
     #view-only-table {
         display: none;
     }
